@@ -1,9 +1,6 @@
 
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pic_grid/routes/routes.dart';
 import 'package:pic_grid/ui/weiget/mixins/loading_mixin.dart';
-import 'package:pic_grid/utils/image_upload_utils.dart';
 
 class HomeViewController extends GetxController with LoadingMixin {
 
