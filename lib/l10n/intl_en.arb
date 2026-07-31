@@ -1,0 +1,71 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "PicGrid",
+
+  "ok": "OK",
+  "cancel": "Cancel",
+  "reset": "Reset",
+  "done": "Done",
+  "delete": "Delete",
+  "save": "Save",
+  "error": "Error",
+  "success": "Success",
+
+  "homeTagline": "Start selecting photos for collage or clipping",
+  "homeBlankCanvas": "Blank canvas",
+  "homePickPhoto": "Pick photo",
+  "homeSettingsTooltip": "Settings",
+
+  "editorTitle": "Edit",
+  "editorCropTooltip": "Crop",
+  "editorDeleteTooltip": "Delete",
+  "editorBackgroundSettingTooltip": "Background settings",
+  "editorAddImageObjectTooltip": "Add image object",
+  "editorLayerListTooltip": "Layer list",
+  "editorSaveToAlbumTooltip": "Save to album",
+  "editorCanvasBackgroundSetting": "Canvas background settings",
+  "editorPickBackgroundImage": "Pick base image from album",
+  "editorOrPickSolidColor": "Or pick a solid color:",
+
+  "permissionError": "Permission error",
+  "albumPermissionRequired": "Album permission required to save",
+  "imageSavedToAlbum": "Image saved to album",
+  "saveFailed": "Save failed: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "clipTitle": "Crop image",
+  "clipLoadingImage": "Loading image...",
+  "clipCancelTooltip": "Cancel",
+  "clipResetTooltip": "Reset crop area",
+  "clipDoneTooltip": "Done",
+
+  "shapeRectangle": "Rectangle",
+  "shapeRoundedRectangle": "Rounded",
+  "shapeCircle": "Circle",
+  "shapeHeart": "Heart",
+  "shapeStar": "Star",
+
+  "settingTitle": "Settings",
+  "settingSectionPurchase": "Purchase",
+  "settingRemoveAds": "Remove ads",
+  "settingUnlocked": "Unlocked",
+  "settingOneTimePurchaseForever": "One-time purchase, remove forever",
+  "settingSectionAbout": "About",
+  "settingVersion": "Version",
+  "settingContactUs": "Contact us",
+  "settingPrivacyPolicyAndTerms": "Privacy Policy & Terms",
+
+  "layerListTitle": "Layer list (drag to reorder)",
+  "layerListEmpty": "No overlay items",
+  "layerItem": "Layer {index}",
+  "@layerItem": {
+    "placeholders": {
+      "index": { "type": "int" }
+    }
+  }
+}

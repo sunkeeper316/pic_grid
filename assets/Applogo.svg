@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- 淺灰色、圓角端點與轉角 -->
+  <g stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    
+    <!-- 左側與下方邊線（形成左下角，並向右、向上延伸形成左上與右下交叉） -->
+    <path d="M 25 12 V 75 H 88" />
+    
+    <!-- 右側與上方邊線（形成右上角，並向左、向下延伸形成左上與右下交叉） -->
+    <path d="M 75 88 V 25 H 12" />
+    
+    <!-- 中間的正方形 -->
+    <rect x="38" y="38" width="24" height="24" />
+    
+  </g>
+</svg>

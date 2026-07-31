@@ -1,0 +1,71 @@
+{
+  "@@locale": "zh_CN",
+
+  "appTitle": "PicGrid",
+
+  "ok": "确定",
+  "cancel": "取消",
+  "reset": "重置",
+  "done": "完成",
+  "delete": "删除",
+  "save": "保存",
+  "error": "错误",
+  "success": "成功",
+
+  "homeTagline": "开始选择照片来做拼贴或剪贴",
+  "homeBlankCanvas": "空白底图",
+  "homePickPhoto": "选择照片",
+  "homeSettingsTooltip": "设置",
+
+  "editorTitle": "编辑",
+  "editorCropTooltip": "裁剪",
+  "editorDeleteTooltip": "删除",
+  "editorBackgroundSettingTooltip": "背景设定",
+  "editorAddImageObjectTooltip": "新增图片对象",
+  "editorLayerListTooltip": "图层列表",
+  "editorSaveToAlbumTooltip": "保存至相册",
+  "editorCanvasBackgroundSetting": "画布背景设定",
+  "editorPickBackgroundImage": "从相册选择底图图片",
+  "editorOrPickSolidColor": "或选择单色背景：",
+
+  "permissionError": "权限错误",
+  "albumPermissionRequired": "需要相册权限才能保存",
+  "imageSavedToAlbum": "图片已保存至相册",
+  "saveFailed": "保存失败：{error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "clipTitle": "裁剪图片",
+  "clipLoadingImage": "加载图片中...",
+  "clipCancelTooltip": "取消",
+  "clipResetTooltip": "重置裁剪范围",
+  "clipDoneTooltip": "完成",
+
+  "shapeRectangle": "矩形",
+  "shapeRoundedRectangle": "圆角",
+  "shapeCircle": "圆形",
+  "shapeHeart": "爱心",
+  "shapeStar": "星形",
+
+  "settingTitle": "设置",
+  "settingSectionPurchase": "购买",
+  "settingRemoveAds": "去除广告",
+  "settingUnlocked": "已解锁",
+  "settingOneTimePurchaseForever": "一次购买，永久去除",
+  "settingSectionAbout": "关于",
+  "settingVersion": "版本",
+  "settingContactUs": "联系我们",
+  "settingPrivacyPolicyAndTerms": "隐私政策与使用条款",
+
+  "layerListTitle": "图层列表（拖动排序）",
+  "layerListEmpty": "目前没有叠加对象",
+  "layerItem": "图层 {index}",
+  "@layerItem": {
+    "placeholders": {
+      "index": { "type": "int" }
+    }
+  }
+}
