@@ -16,6 +16,11 @@
   "homeBlankCanvas": "空白底圖",
   "homePickPhoto": "選擇照片",
   "homeSettingsTooltip": "設定",
+  "pickerTitle": "選擇照片",
+  "pickerAdd": "加入",
+  "pickerMinimumHint": "請選擇 2～12 張照片",
+  "pickerOpenSettings": "開啟設定",
+  "pickerLoadFailed": "部分照片無法載入，請重新選擇。",
 
   "editorTitle": "編輯",
   "editorCropTooltip": "裁剪",

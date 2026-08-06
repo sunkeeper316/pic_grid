@@ -139,6 +139,51 @@ class S {
     );
   }
 
+  /// `Select photos`
+  String get pickerTitle {
+    return Intl.message(
+      'Select photos',
+      name: 'pickerTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add`
+  String get pickerAdd {
+    return Intl.message('Add', name: 'pickerAdd', desc: '', args: []);
+  }
+
+  /// `Select 2 to 12 photos`
+  String get pickerMinimumHint {
+    return Intl.message(
+      'Select 2 to 12 photos',
+      name: 'pickerMinimumHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open settings`
+  String get pickerOpenSettings {
+    return Intl.message(
+      'Open settings',
+      name: 'pickerOpenSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Some photos could not be loaded. Please try again.`
+  String get pickerLoadFailed {
+    return Intl.message(
+      'Some photos could not be loaded. Please try again.',
+      name: 'pickerLoadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit`
   String get editorTitle {
     return Intl.message('Edit', name: 'editorTitle', desc: '', args: []);

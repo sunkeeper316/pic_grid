@@ -7,11 +7,11 @@ import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pic_grid/generated/l10n.dart';
+import 'package:pic_grid/ui/view/photo_picker/photo_picker_view.dart';
 
 enum MainPhotoPosition { left, right, top, bottom }
 
 class GridCollageViewController extends GetxController {
-  final ImagePicker _picker = ImagePicker();
   final GlobalKey repaintKey = GlobalKey();
 
   var selectedImages = <XFile>[].obs;
@@ -19,10 +19,15 @@ class GridCollageViewController extends GetxController {
   var borderWidth = 0.0.obs;
   var borderColor = Colors.white.obs;
   var mainPhotoPosition = MainPhotoPosition.left.obs;
+  var evenLayoutByColumns = true.obs;
 
   // Example state for grid layout proportions
   var rowProportions = <double>[].obs;
   var colProportions = <double>[].obs;
+  var localProportions = <List<double>>[].obs;
+
+  bool get usesMainPhotoLayout =>
+      selectedImages.length.isOdd && selectedImages.length != 9;
 
   @override
   void onInit() {
@@ -35,17 +40,11 @@ class GridCollageViewController extends GetxController {
   }
 
   Future<void> pickImages() async {
-    final List<XFile> images = await _picker.pickMultiImage(limit: 12);
+    final context = Get.context;
+    if (context == null) return;
+    final List<XFile> images = await PhotoPickerView.pick(context);
     if (images.isNotEmpty) {
-      if (images.length > 12) {
-        selectedImages.value = images.sublist(0, 12);
-      } else if (images.length < 2) {
-        // Need at least 2
-        Get.snackbar("Error", "Please select at least 2 photos.");
-        return;
-      } else {
-        selectedImages.value = images;
-      }
+      selectedImages.value = images;
       _initializeProportions();
     }
   }
@@ -112,7 +111,10 @@ class GridCollageViewController extends GetxController {
     int rows = 1;
     int cols = 1;
 
-    if (count.isOdd) {
+    if (count == 9) {
+      rows = 3;
+      cols = 3;
+    } else if (count.isOdd) {
       // The first photo spans the full left side. The remaining photos fill
       // one column for 3 photos, or two columns for 5–11 photos.
       rows = count == 3 ? 2 : (count - 1) ~/ 2;
@@ -139,12 +141,18 @@ class GridCollageViewController extends GetxController {
 
     rowProportions.value = List.generate(rows, (index) => 1.0 / rows);
     colProportions.value = List.generate(cols, (index) => 1.0 / cols);
+    final trackCount = usesMainPhotoLayout ? cols - 1 : cols;
+    localProportions.assignAll(
+      List.generate(trackCount, (_) => List.generate(rows, (_) => 1.0 / rows)),
+    );
     mainPhotoPosition.value = MainPhotoPosition.left;
+    evenLayoutByColumns.value = true;
   }
 
   void toggleLayout() {
-    if (selectedImages.length.isEven) {
+    if (!usesMainPhotoLayout) {
       _transposeGrid();
+      evenLayoutByColumns.toggle();
       return;
     }
 
@@ -197,6 +205,21 @@ class GridCollageViewController extends GetxController {
       colProportions[index] = newProp;
       colProportions[index + 1] = newNextProp;
       colProportions.refresh();
+    }
+  }
+
+  void updateLocalProportion(int track, int index, double delta) {
+    if (track < 0 || track >= localProportions.length) return;
+    final proportions = List<double>.of(localProportions[track]);
+    if (index < 0 || index >= proportions.length - 1) return;
+
+    final current = proportions[index] + delta;
+    final next = proportions[index + 1] - delta;
+    if (current > 0.1 && next > 0.1) {
+      proportions[index] = current;
+      proportions[index + 1] = next;
+      localProportions[track] = proportions;
+      localProportions.refresh();
     }
   }
 

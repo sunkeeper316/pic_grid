@@ -139,7 +139,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 18),
-              if (controller.selectedImages.length.isOdd)
+              if (controller.usesMainPhotoLayout)
                 Obx(
                   () => Wrap(
                     spacing: 12,
@@ -255,10 +255,14 @@ class GridCollageView extends GetView<GridCollageViewController> {
         final selectedImages = controller.selectedImages.toList();
         final rowProportions = controller.rowProportions.toList();
         final colProportions = controller.colProportions.toList();
+        final localProportions = controller.localProportions
+            .map((track) => List<double>.of(track))
+            .toList();
         final borderWidth = controller.borderWidth.value;
         final borderColor = controller.borderColor.value;
         final isSaving = controller.isSaving.value;
         final mainPhotoPosition = controller.mainPhotoPosition.value;
+        final evenLayoutByColumns = controller.evenLayoutByColumns.value;
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -267,7 +271,8 @@ class GridCollageView extends GetView<GridCollageViewController> {
 
             int rows = rowProportions.length;
             int cols = colProportions.length;
-            final hasMainPhoto = selectedImages.length.isOdd;
+            final hasMainPhoto =
+                selectedImages.length.isOdd && selectedImages.length != 9;
             final mainPhotoAtLeft =
                 hasMainPhoto && mainPhotoPosition == MainPhotoPosition.left;
             final mainPhotoAtRight =
@@ -279,22 +284,19 @@ class GridCollageView extends GetView<GridCollageViewController> {
 
             List<Widget> children = [];
 
-            void addPhoto(int index, int row, int col, {bool main = false}) {
-              double top = 0;
-              for (int i = 0; i < row; i++) {
-                top += rowProportions[i] * height;
-              }
-              double left = 0;
-              for (int i = 0; i < col; i++) {
-                left += colProportions[i] * width;
-              }
-
+            void addPhotoRect(
+              int index,
+              double left,
+              double top,
+              double cellWidth,
+              double cellHeight,
+            ) {
               children.add(
                 Positioned(
-                  top: main ? 0 : top,
+                  top: top,
                   left: left,
-                  width: colProportions[col] * width,
-                  height: main ? height : rowProportions[row] * height,
+                  width: cellWidth,
+                  height: cellHeight,
                   child: Container(
                     foregroundDecoration: BoxDecoration(
                       border: borderWidth > 0
@@ -312,78 +314,151 @@ class GridCollageView extends GetView<GridCollageViewController> {
 
             if (mainPhotoAtLeft || mainPhotoAtRight) {
               final mainColumn = mainPhotoAtLeft ? 0 : cols - 1;
-              addPhoto(0, 0, mainColumn, main: true);
-              final secondaryColumns = cols - 1;
-              for (int index = 1; index < selectedImages.length; index++) {
-                final position = index - 1;
-                addPhoto(
-                  index,
-                  position ~/ secondaryColumns,
-                  (mainPhotoAtLeft ? 1 : 0) + position % secondaryColumns,
-                );
+              final mainLeft =
+                  colProportions
+                      .take(mainColumn)
+                      .fold<double>(0, (sum, value) => sum + value) *
+                  width;
+              addPhotoRect(
+                0,
+                mainLeft,
+                0,
+                colProportions[mainColumn] * width,
+                height,
+              );
+
+              int imageIndex = 1;
+              for (int track = 0; track < localProportions.length; track++) {
+                final column = (mainPhotoAtLeft ? 1 : 0) + track;
+                final trackLeft =
+                    colProportions
+                        .take(column)
+                        .fold<double>(0, (sum, value) => sum + value) *
+                    width;
+                final trackWidth = colProportions[column] * width;
+                double top = 0;
+                for (
+                  int segment = 0;
+                  segment < localProportions[track].length;
+                  segment++
+                ) {
+                  final cellHeight = localProportions[track][segment] * height;
+                  addPhotoRect(
+                    imageIndex++,
+                    trackLeft,
+                    top,
+                    trackWidth,
+                    cellHeight,
+                  );
+                  top += cellHeight;
+                }
               }
             } else if (mainPhotoAtTop || mainPhotoAtBottom) {
               final mainRow = mainPhotoAtTop ? 0 : rows - 1;
-              double mainTop = 0;
-              for (int i = 0; i < mainRow; i++) {
-                mainTop += rowProportions[i] * height;
-              }
-              children.add(
-                Positioned(
-                  top: mainTop,
-                  left: 0,
-                  width: width,
-                  height: rowProportions[mainRow] * height,
-                  child: Container(
-                    foregroundDecoration: BoxDecoration(
-                      border: borderWidth > 0
-                          ? Border.all(color: borderColor, width: borderWidth)
-                          : null,
-                    ),
-                    child: Image.file(
-                      File(selectedImages.first.path),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+              final mainTop =
+                  rowProportions
+                      .take(mainRow)
+                      .fold<double>(0, (sum, value) => sum + value) *
+                  height;
+              addPhotoRect(
+                0,
+                0,
+                mainTop,
+                width,
+                rowProportions[mainRow] * height,
               );
-              for (int index = 1; index < selectedImages.length; index++) {
-                final position = index - 1;
-                addPhoto(
-                  index,
-                  (mainPhotoAtTop ? 1 : 0) + position ~/ cols,
-                  position % cols,
-                );
+
+              int imageIndex = 1;
+              for (int track = 0; track < localProportions.length; track++) {
+                final row = (mainPhotoAtTop ? 1 : 0) + track;
+                final trackTop =
+                    rowProportions
+                        .take(row)
+                        .fold<double>(0, (sum, value) => sum + value) *
+                    height;
+                final trackHeight = rowProportions[row] * height;
+                double left = 0;
+                for (
+                  int segment = 0;
+                  segment < localProportions[track].length;
+                  segment++
+                ) {
+                  final cellWidth = localProportions[track][segment] * width;
+                  addPhotoRect(
+                    imageIndex++,
+                    left,
+                    trackTop,
+                    cellWidth,
+                    trackHeight,
+                  );
+                  left += cellWidth;
+                }
               }
             } else {
-              for (int index = 0; index < selectedImages.length; index++) {
-                addPhoto(index, index ~/ cols, index % cols);
+              int imageIndex = 0;
+              if (evenLayoutByColumns) {
+                for (int track = 0; track < localProportions.length; track++) {
+                  final trackLeft =
+                      colProportions
+                          .take(track)
+                          .fold<double>(0, (sum, value) => sum + value) *
+                      width;
+                  final trackWidth = colProportions[track] * width;
+                  double top = 0;
+                  for (final proportion in localProportions[track]) {
+                    final cellHeight = proportion * height;
+                    addPhotoRect(
+                      imageIndex++,
+                      trackLeft,
+                      top,
+                      trackWidth,
+                      cellHeight,
+                    );
+                    top += cellHeight;
+                  }
+                }
+              } else {
+                for (int track = 0; track < localProportions.length; track++) {
+                  final trackTop =
+                      rowProportions
+                          .take(track)
+                          .fold<double>(0, (sum, value) => sum + value) *
+                      height;
+                  final trackHeight = rowProportions[track] * height;
+                  double left = 0;
+                  for (final proportion in localProportions[track]) {
+                    final cellWidth = proportion * width;
+                    addPhotoRect(
+                      imageIndex++,
+                      left,
+                      trackTop,
+                      cellWidth,
+                      trackHeight,
+                    );
+                    left += cellWidth;
+                  }
+                }
               }
             }
 
             if (!isSaving) {
-              // Draw horizontal splitters (draggable)
-              double topAcc = 0;
-              for (int r = 0; r < rows - 1; r++) {
-                topAcc += rowProportions[r] * height;
-                int rowIndex = r; // capture for closure
+              void addHorizontalHandle({
+                required double top,
+                required double left,
+                required double handleWidth,
+                required ValueChanged<double> onDrag,
+              }) {
                 children.add(
                   Positioned(
-                    top: topAcc - 18,
-                    left: mainPhotoAtLeft ? colProportions.first * width : 0,
-                    width: mainPhotoAtLeft
-                        ? width - colProportions.first * width
-                        : mainPhotoAtRight
-                        ? width - colProportions.last * width
-                        : width,
+                    top: top - 18,
+                    left: left,
+                    width: handleWidth,
                     height: 36,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onDoubleTap: controller.toggleLayout,
-                      onVerticalDragUpdate: (details) {
-                        double deltaProp = details.delta.dy / height;
-                        controller.updateRowProportion(rowIndex, deltaProp);
-                      },
+                      onVerticalDragUpdate: (details) =>
+                          onDrag(details.delta.dy),
                       child: Center(
                         child: _DividerHandle(
                           axis: Axis.horizontal,
@@ -395,28 +470,23 @@ class GridCollageView extends GetView<GridCollageViewController> {
                 );
               }
 
-              // Draw vertical splitters (draggable)
-              double leftAcc = 0;
-              for (int c = 0; c < cols - 1; c++) {
-                leftAcc += colProportions[c] * width;
-                int colIndex = c; // capture for closure
+              void addVerticalHandle({
+                required double left,
+                required double top,
+                required double handleHeight,
+                required ValueChanged<double> onDrag,
+              }) {
                 children.add(
                   Positioned(
-                    top: mainPhotoAtTop ? rowProportions.first * height : 0,
-                    left: leftAcc - 18,
+                    top: top,
+                    left: left - 18,
                     width: 36,
-                    height: mainPhotoAtTop
-                        ? height - rowProportions.first * height
-                        : mainPhotoAtBottom
-                        ? height - rowProportions.last * height
-                        : height,
+                    height: handleHeight,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onDoubleTap: controller.toggleLayout,
-                      onHorizontalDragUpdate: (details) {
-                        double deltaProp = details.delta.dx / width;
-                        controller.updateColProportion(colIndex, deltaProp);
-                      },
+                      onHorizontalDragUpdate: (details) =>
+                          onDrag(details.delta.dx),
                       child: Center(
                         child: _DividerHandle(
                           axis: Axis.vertical,
@@ -426,6 +496,118 @@ class GridCollageView extends GetView<GridCollageViewController> {
                     ),
                   ),
                 );
+              }
+
+              void addGlobalHorizontalHandles() {
+                double top = 0;
+                for (int row = 0; row < rows - 1; row++) {
+                  top += rowProportions[row] * height;
+                  final rowIndex = row;
+                  addHorizontalHandle(
+                    top: top,
+                    left: 0,
+                    handleWidth: width,
+                    onDrag: (delta) => controller.updateRowProportion(
+                      rowIndex,
+                      delta / height,
+                    ),
+                  );
+                }
+              }
+
+              void addGlobalVerticalHandles() {
+                double left = 0;
+                for (int col = 0; col < cols - 1; col++) {
+                  left += colProportions[col] * width;
+                  final colIndex = col;
+                  addVerticalHandle(
+                    left: left,
+                    top: 0,
+                    handleHeight: height,
+                    onDrag: (delta) =>
+                        controller.updateColProportion(colIndex, delta / width),
+                  );
+                }
+              }
+
+              void addLocalHorizontalHandles(int columnOffset) {
+                for (int track = 0; track < localProportions.length; track++) {
+                  final column = columnOffset + track;
+                  final trackLeft =
+                      colProportions
+                          .take(column)
+                          .fold<double>(0, (sum, value) => sum + value) *
+                      width;
+                  final trackWidth = colProportions[column] * width;
+                  double top = 0;
+                  for (
+                    int segment = 0;
+                    segment < localProportions[track].length - 1;
+                    segment++
+                  ) {
+                    top += localProportions[track][segment] * height;
+                    final trackIndex = track;
+                    final segmentIndex = segment;
+                    addHorizontalHandle(
+                      top: top,
+                      left: trackLeft,
+                      handleWidth: trackWidth,
+                      onDrag: (delta) => controller.updateLocalProportion(
+                        trackIndex,
+                        segmentIndex,
+                        delta / height,
+                      ),
+                    );
+                  }
+                }
+              }
+
+              void addLocalVerticalHandles(int rowOffset) {
+                for (int track = 0; track < localProportions.length; track++) {
+                  final row = rowOffset + track;
+                  final trackTop =
+                      rowProportions
+                          .take(row)
+                          .fold<double>(0, (sum, value) => sum + value) *
+                      height;
+                  final trackHeight = rowProportions[row] * height;
+                  double left = 0;
+                  for (
+                    int segment = 0;
+                    segment < localProportions[track].length - 1;
+                    segment++
+                  ) {
+                    left += localProportions[track][segment] * width;
+                    final trackIndex = track;
+                    final segmentIndex = segment;
+                    addVerticalHandle(
+                      left: left,
+                      top: trackTop,
+                      handleHeight: trackHeight,
+                      onDrag: (delta) => controller.updateLocalProportion(
+                        trackIndex,
+                        segmentIndex,
+                        delta / width,
+                      ),
+                    );
+                  }
+                }
+              }
+
+              if (mainPhotoAtLeft || mainPhotoAtRight) {
+                addGlobalVerticalHandles();
+                addLocalHorizontalHandles(mainPhotoAtLeft ? 1 : 0);
+              } else if (mainPhotoAtTop || mainPhotoAtBottom) {
+                addGlobalHorizontalHandles();
+                addLocalVerticalHandles(mainPhotoAtTop ? 1 : 0);
+              } else {
+                if (evenLayoutByColumns) {
+                  addGlobalVerticalHandles();
+                  addLocalHorizontalHandles(0);
+                } else {
+                  addGlobalHorizontalHandles();
+                  addLocalVerticalHandles(0);
+                }
               }
             }
 

@@ -16,6 +16,11 @@
   "homeBlankCanvas": "Blank canvas",
   "homePickPhoto": "Pick photo",
   "homeSettingsTooltip": "Settings",
+  "pickerTitle": "Select photos",
+  "pickerAdd": "Add",
+  "pickerMinimumHint": "Select 2 to 12 photos",
+  "pickerOpenSettings": "Open settings",
+  "pickerLoadFailed": "Some photos could not be loaded. Please try again.",
 
   "editorTitle": "Edit",
   "editorCropTooltip": "Crop",

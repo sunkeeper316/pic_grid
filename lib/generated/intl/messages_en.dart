@@ -99,6 +99,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "permissionError": MessageLookupByLibrary.simpleMessage("Permission error"),
+    "pickerAdd": MessageLookupByLibrary.simpleMessage("Add"),
+    "pickerLoadFailed": MessageLookupByLibrary.simpleMessage(
+      "Some photos could not be loaded. Please try again.",
+    ),
+    "pickerMinimumHint": MessageLookupByLibrary.simpleMessage(
+      "Select 2 to 12 photos",
+    ),
+    "pickerOpenSettings": MessageLookupByLibrary.simpleMessage("Open settings"),
+    "pickerTitle": MessageLookupByLibrary.simpleMessage("Select photos"),
     "reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "saveFailed": m1,

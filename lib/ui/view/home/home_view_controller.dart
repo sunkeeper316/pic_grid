@@ -1,25 +1,20 @@
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pic_grid/routes/routes.dart';
 import 'package:pic_grid/ui/weiget/mixins/loading_mixin.dart';
+import 'package:pic_grid/ui/view/photo_picker/photo_picker_view.dart';
 
 class HomeViewController extends GetxController with LoadingMixin {
-  final ImagePicker _picker = ImagePicker();
-
   // final languageService = Get.find<LanguageService>();
   var message = ''.obs;
 
   void checkFirstAndLogin() async {}
 
   Future<void> pickImages() async {
-    final images = await _picker.pickMultiImage(limit: 12);
+    final context = Get.context;
+    if (context == null) return;
+    final images = await PhotoPickerView.pick(context);
 
     if (images.isEmpty) return;
-
-    if (images.length < 2) {
-      Get.snackbar('Error', 'Please select at least 2 photos.');
-      return;
-    }
 
     await Get.toNamed(Routes.gridCollageView, arguments: images);
   }
