@@ -70,12 +70,12 @@ class HomeView extends GetView<HomeViewController> {
                       fontSize: 16,
                     ),
                   ),
-
+                  const SizedBox(height: 36),
                   PrimaryButton(
                     text: 'Grid Collage', // Grid Collage button
                     icon: Icons.grid_view_outlined,
                     height: 64,
-                    onTap: () => Get.toNamed(Routes.gridCollageView),
+                    onTap: controller.pickImages,
                   ),
                 ],
               ),

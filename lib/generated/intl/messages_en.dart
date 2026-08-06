@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Album permission required to save",
     ),
     "appTitle": MessageLookupByLibrary.simpleMessage("PicGrid"),
+    "borderColor": MessageLookupByLibrary.simpleMessage("Color"),
+    "borderNone": MessageLookupByLibrary.simpleMessage("None"),
+    "borderSettings": MessageLookupByLibrary.simpleMessage("Border"),
+    "borderThickness": MessageLookupByLibrary.simpleMessage("Thickness"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("Cancel"),
     "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("Done"),
@@ -45,6 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editorBackgroundSettingTooltip": MessageLookupByLibrary.simpleMessage(
       "Background settings",
+    ),
+    "editorBorderSettingsTooltip": MessageLookupByLibrary.simpleMessage(
+      "Border settings",
     ),
     "editorCanvasBackgroundSetting": MessageLookupByLibrary.simpleMessage(
       "Canvas background settings",

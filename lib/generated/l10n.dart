@@ -199,6 +199,41 @@ class S {
     );
   }
 
+  /// `Border settings`
+  String get editorBorderSettingsTooltip {
+    return Intl.message(
+      'Border settings',
+      name: 'editorBorderSettingsTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Border`
+  String get borderSettings {
+    return Intl.message('Border', name: 'borderSettings', desc: '', args: []);
+  }
+
+  /// `Color`
+  String get borderColor {
+    return Intl.message('Color', name: 'borderColor', desc: '', args: []);
+  }
+
+  /// `Thickness`
+  String get borderThickness {
+    return Intl.message(
+      'Thickness',
+      name: 'borderThickness',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `None`
+  String get borderNone {
+    return Intl.message('None', name: 'borderNone', desc: '', args: []);
+  }
+
   /// `Canvas background settings`
   String get editorCanvasBackgroundSetting {
     return Intl.message(

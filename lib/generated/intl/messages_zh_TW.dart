@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "需要相簿權限才能存檔",
     ),
     "appTitle": MessageLookupByLibrary.simpleMessage("PicGrid"),
+    "borderColor": MessageLookupByLibrary.simpleMessage("顏色"),
+    "borderNone": MessageLookupByLibrary.simpleMessage("無框線"),
+    "borderSettings": MessageLookupByLibrary.simpleMessage("框線"),
+    "borderThickness": MessageLookupByLibrary.simpleMessage("粗細"),
     "cancel": MessageLookupByLibrary.simpleMessage("取消"),
     "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("取消"),
     "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("完成"),
@@ -44,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorBackgroundSettingTooltip": MessageLookupByLibrary.simpleMessage(
       "背景設定",
     ),
+    "editorBorderSettingsTooltip": MessageLookupByLibrary.simpleMessage("框線設定"),
     "editorCanvasBackgroundSetting": MessageLookupByLibrary.simpleMessage(
       "畫布背景設定",
     ),
