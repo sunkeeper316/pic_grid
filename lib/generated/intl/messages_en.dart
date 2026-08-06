@@ -61,6 +61,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage(
       "Layer list",
     ),
+    "editorLayoutSettingsTooltip": MessageLookupByLibrary.simpleMessage(
+      "Change layout",
+    ),
     "editorOrPickSolidColor": MessageLookupByLibrary.simpleMessage(
       "Or pick a solid color:",
     ),
@@ -85,6 +88,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "layerListEmpty": MessageLookupByLibrary.simpleMessage("No overlay items"),
     "layerListTitle": MessageLookupByLibrary.simpleMessage(
       "Layer list (drag to reorder)",
+    ),
+    "layoutMainBottom": MessageLookupByLibrary.simpleMessage("Main bottom"),
+    "layoutMainLeft": MessageLookupByLibrary.simpleMessage("Main left"),
+    "layoutMainRight": MessageLookupByLibrary.simpleMessage("Main right"),
+    "layoutMainTop": MessageLookupByLibrary.simpleMessage("Main top"),
+    "layoutSettings": MessageLookupByLibrary.simpleMessage("Choose layout"),
+    "layoutTranspose": MessageLookupByLibrary.simpleMessage(
+      "Switch grid direction",
     ),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "permissionError": MessageLookupByLibrary.simpleMessage("Permission error"),

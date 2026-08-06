@@ -123,6 +123,78 @@ class GridCollageView extends GetView<GridCollageViewController> {
     );
   }
 
+  void _showLayoutSettings(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                S.of(context).layoutSettings,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 18),
+              if (controller.selectedImages.length.isOdd)
+                Obx(
+                  () => Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      _LayoutOption(
+                        position: MainPhotoPosition.left,
+                        label: S.of(context).layoutMainLeft,
+                        selected:
+                            controller.mainPhotoPosition.value ==
+                            MainPhotoPosition.left,
+                        onTap: controller.setMainPhotoPosition,
+                      ),
+                      _LayoutOption(
+                        position: MainPhotoPosition.right,
+                        label: S.of(context).layoutMainRight,
+                        selected:
+                            controller.mainPhotoPosition.value ==
+                            MainPhotoPosition.right,
+                        onTap: controller.setMainPhotoPosition,
+                      ),
+                      _LayoutOption(
+                        position: MainPhotoPosition.top,
+                        label: S.of(context).layoutMainTop,
+                        selected:
+                            controller.mainPhotoPosition.value ==
+                            MainPhotoPosition.top,
+                        onTap: controller.setMainPhotoPosition,
+                      ),
+                      _LayoutOption(
+                        position: MainPhotoPosition.bottom,
+                        label: S.of(context).layoutMainBottom,
+                        selected:
+                            controller.mainPhotoPosition.value ==
+                            MainPhotoPosition.bottom,
+                        onTap: controller.setMainPhotoPosition,
+                      ),
+                    ],
+                  ),
+                )
+              else
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.screen_rotation_alt_outlined),
+                  title: Text(S.of(context).layoutTranspose),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: controller.toggleLayout,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +220,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                 icon: const Icon(Icons.border_style_outlined),
                 tooltip: S.of(context).editorBorderSettingsTooltip,
                 onPressed: () => _showBorderSettings(context),
+              ),
+              IconButton(
+                icon: const Icon(Icons.dashboard_customize_outlined),
+                tooltip: S.of(context).editorLayoutSettingsTooltip,
+                onPressed: () => _showLayoutSettings(context),
               ),
               Obx(
                 () => IconButton(
@@ -181,7 +258,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
         final borderWidth = controller.borderWidth.value;
         final borderColor = controller.borderColor.value;
         final isSaving = controller.isSaving.value;
-        final mainPhotoOnSide = controller.mainPhotoOnSide.value;
+        final mainPhotoPosition = controller.mainPhotoPosition.value;
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -191,8 +268,14 @@ class GridCollageView extends GetView<GridCollageViewController> {
             int rows = rowProportions.length;
             int cols = colProportions.length;
             final hasMainPhoto = selectedImages.length.isOdd;
-            final mainPhotoAtLeft = hasMainPhoto && mainPhotoOnSide;
-            final mainPhotoAtTop = hasMainPhoto && !mainPhotoOnSide;
+            final mainPhotoAtLeft =
+                hasMainPhoto && mainPhotoPosition == MainPhotoPosition.left;
+            final mainPhotoAtRight =
+                hasMainPhoto && mainPhotoPosition == MainPhotoPosition.right;
+            final mainPhotoAtTop =
+                hasMainPhoto && mainPhotoPosition == MainPhotoPosition.top;
+            final mainPhotoAtBottom =
+                hasMainPhoto && mainPhotoPosition == MainPhotoPosition.bottom;
 
             List<Widget> children = [];
 
@@ -227,24 +310,30 @@ class GridCollageView extends GetView<GridCollageViewController> {
               );
             }
 
-            if (mainPhotoAtLeft) {
-              addPhoto(0, 0, 0, main: true);
+            if (mainPhotoAtLeft || mainPhotoAtRight) {
+              final mainColumn = mainPhotoAtLeft ? 0 : cols - 1;
+              addPhoto(0, 0, mainColumn, main: true);
               final secondaryColumns = cols - 1;
               for (int index = 1; index < selectedImages.length; index++) {
                 final position = index - 1;
                 addPhoto(
                   index,
                   position ~/ secondaryColumns,
-                  1 + position % secondaryColumns,
+                  (mainPhotoAtLeft ? 1 : 0) + position % secondaryColumns,
                 );
               }
-            } else if (mainPhotoAtTop) {
+            } else if (mainPhotoAtTop || mainPhotoAtBottom) {
+              final mainRow = mainPhotoAtTop ? 0 : rows - 1;
+              double mainTop = 0;
+              for (int i = 0; i < mainRow; i++) {
+                mainTop += rowProportions[i] * height;
+              }
               children.add(
                 Positioned(
-                  top: 0,
+                  top: mainTop,
                   left: 0,
                   width: width,
-                  height: rowProportions.first * height,
+                  height: rowProportions[mainRow] * height,
                   child: Container(
                     foregroundDecoration: BoxDecoration(
                       border: borderWidth > 0
@@ -260,7 +349,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
               );
               for (int index = 1; index < selectedImages.length; index++) {
                 final position = index - 1;
-                addPhoto(index, 1 + position ~/ cols, position % cols);
+                addPhoto(
+                  index,
+                  (mainPhotoAtTop ? 1 : 0) + position ~/ cols,
+                  position % cols,
+                );
               }
             } else {
               for (int index = 0; index < selectedImages.length; index++) {
@@ -280,6 +373,8 @@ class GridCollageView extends GetView<GridCollageViewController> {
                     left: mainPhotoAtLeft ? colProportions.first * width : 0,
                     width: mainPhotoAtLeft
                         ? width - colProportions.first * width
+                        : mainPhotoAtRight
+                        ? width - colProportions.last * width
                         : width,
                     height: 36,
                     child: GestureDetector(
@@ -312,6 +407,8 @@ class GridCollageView extends GetView<GridCollageViewController> {
                     width: 36,
                     height: mainPhotoAtTop
                         ? height - rowProportions.first * height
+                        : mainPhotoAtBottom
+                        ? height - rowProportions.last * height
                         : height,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
@@ -373,5 +470,148 @@ class _DividerHandle extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _LayoutOption extends StatelessWidget {
+  const _LayoutOption({
+    required this.position,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final MainPhotoPosition position;
+  final String label;
+  final bool selected;
+  final ValueChanged<MainPhotoPosition> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () => onTap(position),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        width: 148,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: selected
+              ? colorScheme.primaryContainer
+              : colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected ? colorScheme.primary : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 82,
+              height: 56,
+              child: CustomPaint(
+                painter: _LayoutPreviewPainter(
+                  position: position,
+                  mainColor: colorScheme.primary,
+                  secondaryColor: colorScheme.onSurface.withValues(alpha: 0.3),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LayoutPreviewPainter extends CustomPainter {
+  const _LayoutPreviewPainter({
+    required this.position,
+    required this.mainColor,
+    required this.secondaryColor,
+  });
+
+  final MainPhotoPosition position;
+  final Color mainColor;
+  final Color secondaryColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const gap = 2.0;
+    final mainPaint = Paint()..color = mainColor;
+    final secondaryPaint = Paint()..color = secondaryColor;
+    final halfWidth = (size.width - gap) / 2;
+    final halfHeight = (size.height - gap) / 2;
+
+    switch (position) {
+      case MainPhotoPosition.left:
+        canvas.drawRect(Rect.fromLTWH(0, 0, halfWidth, size.height), mainPaint);
+        canvas.drawRect(
+          Rect.fromLTWH(halfWidth + gap, 0, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(
+            halfWidth + gap,
+            halfHeight + gap,
+            halfWidth,
+            halfHeight,
+          ),
+          secondaryPaint,
+        );
+      case MainPhotoPosition.right:
+        canvas.drawRect(
+          Rect.fromLTWH(halfWidth + gap, 0, halfWidth, size.height),
+          mainPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(0, 0, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(0, halfHeight + gap, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+      case MainPhotoPosition.top:
+        canvas.drawRect(Rect.fromLTWH(0, 0, size.width, halfHeight), mainPaint);
+        canvas.drawRect(
+          Rect.fromLTWH(0, halfHeight + gap, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(
+            halfWidth + gap,
+            halfHeight + gap,
+            halfWidth,
+            halfHeight,
+          ),
+          secondaryPaint,
+        );
+      case MainPhotoPosition.bottom:
+        canvas.drawRect(
+          Rect.fromLTWH(0, halfHeight + gap, size.width, halfHeight),
+          mainPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(0, 0, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+        canvas.drawRect(
+          Rect.fromLTWH(halfWidth + gap, 0, halfWidth, halfHeight),
+          secondaryPaint,
+        );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _LayoutPreviewPainter oldDelegate) {
+    return position != oldDelegate.position ||
+        mainColor != oldDelegate.mainColor ||
+        secondaryColor != oldDelegate.secondaryColor;
   }
 }

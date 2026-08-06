@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pic_grid/generated/l10n.dart';
 
+enum MainPhotoPosition { left, right, top, bottom }
+
 class GridCollageViewController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   final GlobalKey repaintKey = GlobalKey();
@@ -16,7 +18,7 @@ class GridCollageViewController extends GetxController {
   var isSaving = false.obs;
   var borderWidth = 0.0.obs;
   var borderColor = Colors.white.obs;
-  var mainPhotoOnSide = true.obs;
+  var mainPhotoPosition = MainPhotoPosition.left.obs;
 
   // Example state for grid layout proportions
   var rowProportions = <double>[].obs;
@@ -137,15 +139,43 @@ class GridCollageViewController extends GetxController {
 
     rowProportions.value = List.generate(rows, (index) => 1.0 / rows);
     colProportions.value = List.generate(cols, (index) => 1.0 / cols);
-    mainPhotoOnSide.value = true;
+    mainPhotoPosition.value = MainPhotoPosition.left;
   }
 
   void toggleLayout() {
+    if (selectedImages.length.isEven) {
+      _transposeGrid();
+      return;
+    }
+
+    final next = switch (mainPhotoPosition.value) {
+      MainPhotoPosition.left => MainPhotoPosition.top,
+      MainPhotoPosition.top => MainPhotoPosition.right,
+      MainPhotoPosition.right => MainPhotoPosition.bottom,
+      MainPhotoPosition.bottom => MainPhotoPosition.left,
+    };
+    setMainPhotoPosition(next);
+  }
+
+  void setMainPhotoPosition(MainPhotoPosition position) {
+    final currentIsSide = _isSide(mainPhotoPosition.value);
+    final nextIsSide = _isSide(position);
+    if (currentIsSide != nextIsSide) {
+      _transposeGrid();
+    }
+    mainPhotoPosition.value = position;
+  }
+
+  bool _isSide(MainPhotoPosition position) {
+    return position == MainPhotoPosition.left ||
+        position == MainPhotoPosition.right;
+  }
+
+  void _transposeGrid() {
     final previousRows = rowProportions.toList();
     final previousColumns = colProportions.toList();
     rowProportions.assignAll(previousColumns);
     colProportions.assignAll(previousRows);
-    mainPhotoOnSide.toggle();
   }
 
   void updateRowProportion(int index, double delta) {

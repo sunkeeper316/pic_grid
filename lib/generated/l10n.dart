@@ -209,6 +209,71 @@ class S {
     );
   }
 
+  /// `Change layout`
+  String get editorLayoutSettingsTooltip {
+    return Intl.message(
+      'Change layout',
+      name: 'editorLayoutSettingsTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose layout`
+  String get layoutSettings {
+    return Intl.message(
+      'Choose layout',
+      name: 'layoutSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Main left`
+  String get layoutMainLeft {
+    return Intl.message(
+      'Main left',
+      name: 'layoutMainLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Main right`
+  String get layoutMainRight {
+    return Intl.message(
+      'Main right',
+      name: 'layoutMainRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Main top`
+  String get layoutMainTop {
+    return Intl.message('Main top', name: 'layoutMainTop', desc: '', args: []);
+  }
+
+  /// `Main bottom`
+  String get layoutMainBottom {
+    return Intl.message(
+      'Main bottom',
+      name: 'layoutMainBottom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch grid direction`
+  String get layoutTranspose {
+    return Intl.message(
+      'Switch grid direction',
+      name: 'layoutTranspose',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Border`
   String get borderSettings {
     return Intl.message('Border', name: 'borderSettings', desc: '', args: []);
