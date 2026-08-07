@@ -45,6 +45,13 @@
   "editorPickBackgroundImage": "從相片庫選擇底圖圖片",
   "editorOrPickSolidColor": "或選擇單色背景：",
   "editorPhotoSelectionRequired": "請從首頁選擇 2～12 張照片。",
+  "editorDiscardTitle": "放棄目前的編輯？",
+  "editorDiscardMessage": "返回後目前的拼貼內容不會保留，需要重新編輯。",
+  "editorKeepEditing": "繼續編輯",
+  "editorDiscardAndLeave": "放棄並返回",
+  "editorReselectTitle": "重新選擇照片？",
+  "editorReselectMessage": "重新選擇後，目前的拼貼排版與編輯內容會被清除。",
+  "editorReselectPhotos": "重新選擇",
 
   "permissionError": "權限錯誤",
   "albumPermissionRequired": "需要相簿權限才能存檔",

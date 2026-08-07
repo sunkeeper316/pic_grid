@@ -64,6 +64,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editorCropTooltip": MessageLookupByLibrary.simpleMessage("Crop"),
     "editorDeleteTooltip": MessageLookupByLibrary.simpleMessage("Delete"),
+    "editorDiscardAndLeave": MessageLookupByLibrary.simpleMessage(
+      "Discard and go back",
+    ),
+    "editorDiscardMessage": MessageLookupByLibrary.simpleMessage(
+      "Your current collage won\'t be saved after you go back, and you\'ll need to edit it again.",
+    ),
+    "editorDiscardTitle": MessageLookupByLibrary.simpleMessage(
+      "Discard your edits?",
+    ),
+    "editorKeepEditing": MessageLookupByLibrary.simpleMessage("Keep editing"),
     "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage(
       "Layer list",
     ),
@@ -78,6 +88,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editorPickBackgroundImage": MessageLookupByLibrary.simpleMessage(
       "Pick base image from album",
+    ),
+    "editorReselectMessage": MessageLookupByLibrary.simpleMessage(
+      "Selecting photos again will clear your current collage layout and edits.",
+    ),
+    "editorReselectPhotos": MessageLookupByLibrary.simpleMessage(
+      "Select again",
+    ),
+    "editorReselectTitle": MessageLookupByLibrary.simpleMessage(
+      "Select photos again?",
     ),
     "editorSaveToAlbumTooltip": MessageLookupByLibrary.simpleMessage(
       "Save to album",

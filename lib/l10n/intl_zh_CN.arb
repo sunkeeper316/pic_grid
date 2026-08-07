@@ -45,6 +45,13 @@
   "editorPickBackgroundImage": "从相册选择底图图片",
   "editorOrPickSolidColor": "或选择单色背景：",
   "editorPhotoSelectionRequired": "请从首页选择 2～12 张照片。",
+  "editorDiscardTitle": "放弃当前编辑？",
+  "editorDiscardMessage": "返回后当前的拼贴内容不会保留，需要重新编辑。",
+  "editorKeepEditing": "继续编辑",
+  "editorDiscardAndLeave": "放弃并返回",
+  "editorReselectTitle": "重新选择照片？",
+  "editorReselectMessage": "重新选择后，当前的拼贴排版与编辑内容会被清除。",
+  "editorReselectPhotos": "重新选择",
 
   "permissionError": "权限错误",
   "albumPermissionRequired": "需要相册权限才能保存",

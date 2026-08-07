@@ -384,6 +384,76 @@ class S {
     );
   }
 
+  /// `Discard your edits?`
+  String get editorDiscardTitle {
+    return Intl.message(
+      'Discard your edits?',
+      name: 'editorDiscardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your current collage won't be saved after you go back, and you'll need to edit it again.`
+  String get editorDiscardMessage {
+    return Intl.message(
+      'Your current collage won\'t be saved after you go back, and you\'ll need to edit it again.',
+      name: 'editorDiscardMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Keep editing`
+  String get editorKeepEditing {
+    return Intl.message(
+      'Keep editing',
+      name: 'editorKeepEditing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discard and go back`
+  String get editorDiscardAndLeave {
+    return Intl.message(
+      'Discard and go back',
+      name: 'editorDiscardAndLeave',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select photos again?`
+  String get editorReselectTitle {
+    return Intl.message(
+      'Select photos again?',
+      name: 'editorReselectTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selecting photos again will clear your current collage layout and edits.`
+  String get editorReselectMessage {
+    return Intl.message(
+      'Selecting photos again will clear your current collage layout and edits.',
+      name: 'editorReselectMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select again`
+  String get editorReselectPhotos {
+    return Intl.message(
+      'Select again',
+      name: 'editorReselectPhotos',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Permission error`
   String get permissionError {
     return Intl.message(

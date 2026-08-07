@@ -45,6 +45,13 @@
   "editorPickBackgroundImage": "Pick base image from album",
   "editorOrPickSolidColor": "Or pick a solid color:",
   "editorPhotoSelectionRequired": "Please select 2 to 12 photos from the home page.",
+  "editorDiscardTitle": "Discard your edits?",
+  "editorDiscardMessage": "Your current collage won't be saved after you go back, and you'll need to edit it again.",
+  "editorKeepEditing": "Keep editing",
+  "editorDiscardAndLeave": "Discard and go back",
+  "editorReselectTitle": "Select photos again?",
+  "editorReselectMessage": "Selecting photos again will clear your current collage layout and edits.",
+  "editorReselectPhotos": "Select again",
 
   "permissionError": "Permission error",
   "albumPermissionRequired": "Album permission required to save",

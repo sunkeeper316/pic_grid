@@ -58,6 +58,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editorCropTooltip": MessageLookupByLibrary.simpleMessage("裁剪"),
     "editorDeleteTooltip": MessageLookupByLibrary.simpleMessage("删除"),
+    "editorDiscardAndLeave": MessageLookupByLibrary.simpleMessage("放弃并返回"),
+    "editorDiscardMessage": MessageLookupByLibrary.simpleMessage(
+      "返回后当前的拼贴内容不会保留，需要重新编辑。",
+    ),
+    "editorDiscardTitle": MessageLookupByLibrary.simpleMessage("放弃当前编辑？"),
+    "editorKeepEditing": MessageLookupByLibrary.simpleMessage("继续编辑"),
     "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage("图层列表"),
     "editorLayoutSettingsTooltip": MessageLookupByLibrary.simpleMessage("更换排版"),
     "editorOrPickSolidColor": MessageLookupByLibrary.simpleMessage("或选择单色背景："),
@@ -67,6 +73,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorPickBackgroundImage": MessageLookupByLibrary.simpleMessage(
       "从相册选择底图图片",
     ),
+    "editorReselectMessage": MessageLookupByLibrary.simpleMessage(
+      "重新选择后，当前的拼贴排版与编辑内容会被清除。",
+    ),
+    "editorReselectPhotos": MessageLookupByLibrary.simpleMessage("重新选择"),
+    "editorReselectTitle": MessageLookupByLibrary.simpleMessage("重新选择照片？"),
     "editorSaveToAlbumTooltip": MessageLookupByLibrary.simpleMessage("保存至相册"),
     "editorTitle": MessageLookupByLibrary.simpleMessage("编辑"),
     "error": MessageLookupByLibrary.simpleMessage("错误"),
