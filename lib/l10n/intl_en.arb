@@ -44,6 +44,7 @@
   "editorCanvasBackgroundSetting": "Canvas background settings",
   "editorPickBackgroundImage": "Pick base image from album",
   "editorOrPickSolidColor": "Or pick a solid color:",
+  "editorPhotoSelectionRequired": "Please select 2 to 12 photos from the home page.",
 
   "permissionError": "Permission error",
   "albumPermissionRequired": "Album permission required to save",
@@ -54,6 +55,10 @@
       "error": { "type": "String" }
     }
   },
+  "imageProcessingFailed": "Image processing failed",
+
+  "ageRestrictionTitle": "Age restriction",
+  "ageRestrictionMessage": "You must be at least 18 years old to use this feature",
 
   "clipTitle": "Crop image",
   "clipLoadingImage": "Loading image...",

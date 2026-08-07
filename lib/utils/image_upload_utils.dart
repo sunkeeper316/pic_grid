@@ -5,14 +5,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:pic_grid/generated/l10n.dart';
 
 class ImageUploadUtils {
   static final ImagePicker _picker = ImagePicker();
 
   /// 選擇圖片（相機或相簿），並自動壓縮，回傳 File 物件
-  static Future<File?> pickImage({
-    required ImageSource source,
-  }) async {
+  static Future<File?> pickImage({required ImageSource source}) async {
     // 不傳 imageQuality，避免 image_picker 自動將 PNG 重新編碼成 JPEG（會失去 alpha）
     final pickedFile = await _picker.pickImage(source: source);
 
@@ -22,7 +21,12 @@ class ImageUploadUtils {
         return File((compressed ?? pickedFile).path);
       } catch (e) {
         debugPrint("處理圖片失敗${e.toString()}");
-        Get.snackbar("處理圖片失敗", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar(
+          S.current.imageProcessingFailed,
+          e.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         return null;
       }
     }
@@ -52,8 +56,9 @@ class ImageUploadUtils {
       // PNG 保留透明通道，其他格式才用 JPEG 壓縮
       final bool keepAlpha = _isPng(file.path);
       final String ext = keepAlpha ? 'png' : 'jpg';
-      final CompressFormat format =
-          keepAlpha ? CompressFormat.png : CompressFormat.jpeg;
+      final CompressFormat format = keepAlpha
+          ? CompressFormat.png
+          : CompressFormat.jpeg;
 
       final String targetPath = join(
         tempDir.path,
@@ -76,9 +81,10 @@ class ImageUploadUtils {
     }
   }
 
-
   /// 使用原生 ImagePicker 選擇單張圖片（相簿），並自動壓縮
-  static Future<XFile?> pickSingleImageNative({ImageSource source = ImageSource.gallery}) async {
+  static Future<XFile?> pickSingleImageNative({
+    ImageSource source = ImageSource.gallery,
+  }) async {
     final XFile? picked = await _picker.pickImage(source: source);
     if (picked == null) return null;
 

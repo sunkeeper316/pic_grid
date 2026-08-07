@@ -26,6 +26,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "ageRestrictionMessage": MessageLookupByLibrary.simpleMessage(
+      "You must be at least 18 years old to use this feature",
+    ),
+    "ageRestrictionTitle": MessageLookupByLibrary.simpleMessage(
+      "Age restriction",
+    ),
     "albumPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "Album permission required to save",
     ),
@@ -67,6 +73,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorOrPickSolidColor": MessageLookupByLibrary.simpleMessage(
       "Or pick a solid color:",
     ),
+    "editorPhotoSelectionRequired": MessageLookupByLibrary.simpleMessage(
+      "Please select 2 to 12 photos from the home page.",
+    ),
     "editorPickBackgroundImage": MessageLookupByLibrary.simpleMessage(
       "Pick base image from album",
     ),
@@ -80,6 +89,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "homeSettingsTooltip": MessageLookupByLibrary.simpleMessage("Settings"),
     "homeTagline": MessageLookupByLibrary.simpleMessage(
       "Start selecting photos for collage or clipping",
+    ),
+    "imageProcessingFailed": MessageLookupByLibrary.simpleMessage(
+      "Image processing failed",
     ),
     "imageSavedToAlbum": MessageLookupByLibrary.simpleMessage(
       "Image saved to album",

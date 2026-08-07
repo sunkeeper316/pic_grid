@@ -52,7 +52,7 @@ class HomeView extends GetView<HomeViewController> {
                   const SizedBox(height: 20),
                   // App 名稱
                   Text(
-                    'PicGrid',
+                    S.of(context).appTitle,
                     textAlign: TextAlign.center,
                     style: Get.textTheme.headlineMedium?.copyWith(
                       color: Colors.white,
@@ -63,7 +63,7 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    S.of(context).homeTagline,
+                    S.of(context).pickerMinimumHint,
                     textAlign: TextAlign.center,
                     style: Get.textTheme.bodyMedium?.copyWith(
                       color: Colors.white70,
@@ -72,7 +72,7 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   const SizedBox(height: 36),
                   PrimaryButton(
-                    text: 'Grid Collage', // Grid Collage button
+                    text: S.current.homePickPhoto, // Grid Collage button
                     icon: Icons.grid_view_outlined,
                     height: 64,
                     onTap: controller.pickImages,

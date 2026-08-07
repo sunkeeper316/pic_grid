@@ -374,6 +374,16 @@ class S {
     );
   }
 
+  /// `Please select 2 to 12 photos from the home page.`
+  String get editorPhotoSelectionRequired {
+    return Intl.message(
+      'Please select 2 to 12 photos from the home page.',
+      name: 'editorPhotoSelectionRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Permission error`
   String get permissionError {
     return Intl.message(
@@ -411,6 +421,36 @@ class S {
       name: 'saveFailed',
       desc: '',
       args: [error],
+    );
+  }
+
+  /// `Image processing failed`
+  String get imageProcessingFailed {
+    return Intl.message(
+      'Image processing failed',
+      name: 'imageProcessingFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Age restriction`
+  String get ageRestrictionTitle {
+    return Intl.message(
+      'Age restriction',
+      name: 'ageRestrictionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must be at least 18 years old to use this feature`
+  String get ageRestrictionMessage {
+    return Intl.message(
+      'You must be at least 18 years old to use this feature',
+      name: 'ageRestrictionMessage',
+      desc: '',
+      args: [],
     );
   }
 

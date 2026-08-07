@@ -44,6 +44,7 @@
   "editorCanvasBackgroundSetting": "畫布背景設定",
   "editorPickBackgroundImage": "從相片庫選擇底圖圖片",
   "editorOrPickSolidColor": "或選擇單色背景：",
+  "editorPhotoSelectionRequired": "請從首頁選擇 2～12 張照片。",
 
   "permissionError": "權限錯誤",
   "albumPermissionRequired": "需要相簿權限才能存檔",
@@ -54,6 +55,10 @@
       "error": { "type": "String" }
     }
   },
+  "imageProcessingFailed": "圖片處理失敗",
+
+  "ageRestrictionTitle": "年齡限制",
+  "ageRestrictionMessage": "您必須年滿 18 歲才能使用此功能",
 
   "clipTitle": "裁剪圖片",
   "clipLoadingImage": "載入圖片中...",

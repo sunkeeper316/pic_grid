@@ -26,6 +26,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "ageRestrictionMessage": MessageLookupByLibrary.simpleMessage(
+      "您必须年满 18 岁才能使用此功能",
+    ),
+    "ageRestrictionTitle": MessageLookupByLibrary.simpleMessage("年龄限制"),
     "albumPermissionRequired": MessageLookupByLibrary.simpleMessage(
       "需要相册权限才能保存",
     ),
@@ -57,6 +61,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage("图层列表"),
     "editorLayoutSettingsTooltip": MessageLookupByLibrary.simpleMessage("更换排版"),
     "editorOrPickSolidColor": MessageLookupByLibrary.simpleMessage("或选择单色背景："),
+    "editorPhotoSelectionRequired": MessageLookupByLibrary.simpleMessage(
+      "请从首页选择 2～12 张照片。",
+    ),
     "editorPickBackgroundImage": MessageLookupByLibrary.simpleMessage(
       "从相册选择底图图片",
     ),
@@ -67,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "homePickPhoto": MessageLookupByLibrary.simpleMessage("选择照片"),
     "homeSettingsTooltip": MessageLookupByLibrary.simpleMessage("设置"),
     "homeTagline": MessageLookupByLibrary.simpleMessage("开始选择照片来做拼贴或剪贴"),
+    "imageProcessingFailed": MessageLookupByLibrary.simpleMessage("图片处理失败"),
     "imageSavedToAlbum": MessageLookupByLibrary.simpleMessage("图片已保存至相册"),
     "layerItem": m0,
     "layerListEmpty": MessageLookupByLibrary.simpleMessage("目前没有叠加对象"),

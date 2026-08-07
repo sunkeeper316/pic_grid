@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pic_grid/generated/l10n.dart';
 
 import 'date_picker_utils.dart';
 
@@ -89,12 +90,12 @@ class BirthdayUtils {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('年齡限制'),
-              content: const Text('您必須年滿18歲才能使用此功能'),
+              title: Text(S.of(context).ageRestrictionTitle),
+              content: Text(S.of(context).ageRestrictionMessage),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('確定'),
+                  child: Text(S.of(context).ok),
                 ),
               ],
             ),
@@ -108,7 +109,7 @@ class BirthdayUtils {
         onDateSelected(selectedDate);
       },
       mode: CupertinoDatePickerMode.date,
-      confirmButtonText: "完成",
+      confirmButtonText: S.of(context).done,
     );
   }
 }

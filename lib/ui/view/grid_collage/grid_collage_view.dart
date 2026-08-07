@@ -246,8 +246,8 @@ class GridCollageView extends GetView<GridCollageViewController> {
       ),
       body: Obx(() {
         if (controller.selectedImages.isEmpty) {
-          return const Center(
-            child: Text('Please select 2 to 12 photos from the home page.'),
+          return Center(
+            child: Text(S.of(context).editorPhotoSelectionRequired),
           );
         }
 
