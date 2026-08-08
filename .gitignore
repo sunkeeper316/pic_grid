@@ -65,6 +65,7 @@ bin/
 /android/.gradle/
 /android/app/build/
 /android/local.properties
+/local.properties
 
 # Symbolication related
 app.*.symbols
