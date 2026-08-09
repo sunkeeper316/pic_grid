@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyViewController extends GetxController {
   final Rx<WebViewController?> webViewController = Rx<WebViewController?>(null);
-  final String url = 'https://sunkeeper316.github.io/picclip_privacy_policy/';
+  final String url = 'https://sunkeeper316.github.io/picgrid_privacy_policy/';
 
   @override
   void onInit() {
