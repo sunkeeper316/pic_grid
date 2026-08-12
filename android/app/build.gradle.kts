@@ -33,6 +33,17 @@ android {
     }
 
     // signingConfigs block removed
+    signingConfigs {
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+
+        create("config") {
+            keyAlias = properties.getProperty("KEYSTORE_ALIAS")
+            keyPassword = properties.getProperty("KEYSTORE_ALIAS_PASSWORD")
+            storeFile = file(properties.getProperty("KEYSTORE_FILE"))
+            storePassword = properties.getProperty("KEYSTORE_PASSWORD")
+        }
+    }
 
     buildTypes {
         getByName("debug") {
@@ -40,7 +51,7 @@ android {
         }
 
         getByName("release") {
-            // signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("config")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -54,15 +65,15 @@ android {
     productFlavors {
         create("local") {
             dimension = "flavors"
-            resValue("string", "app_name", "PicGrid local")
+            resValue("string", "app_name", "PicGrids local")
         }
         create("dev") {
             dimension = "flavors"
-            resValue("string", "app_name", "PicGrid T")
+            resValue("string", "app_name", "PicGrids T")
         }
         create("prod") {
             dimension = "flavors"
-            resValue("string", "app_name", "PicGrid")
+            resValue("string", "app_name", "PicGrids")
         }
     }
 }
