@@ -11,6 +11,7 @@ class SharedPreference {
   static const String keyFilterByInterest = 'FilterByInterest';
   static const String keyShowUntaggedPosts = 'ShowUntaggedPosts';
   static const String keySubscriptionStatus = 'SubscriptionStatus';
+  static const String keyAdRemoved = 'AdRemoved';
   static const String keyFilterByMeetupKind = 'FilterByMeetupKind';
   static const String keySelectedMeetupKindId = 'SelectedMeetupKindId';
   static const String keySelectedMeetupCountryId = 'SelectedMeetupCountryId';
@@ -74,7 +75,7 @@ class SharedPreference {
 
   static Future<bool> loadCheckFirstOpenApp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("CheckFristOpenApp ${prefs.getBool(keyCheckFirstOpenApp)}");
+    debugPrint("CheckFristOpenApp ${prefs.getBool(keyCheckFirstOpenApp)}");
     return prefs.getBool(keyCheckFirstOpenApp) ?? true;
   }
 
@@ -124,6 +125,20 @@ class SharedPreference {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     debugPrint("SubscriptionStatus ${prefs.getBool(keySubscriptionStatus)}");
     return prefs.getBool(keySubscriptionStatus) ?? false;
+  }
+
+  /// 快取「移除廣告」的購買權限。
+  ///
+  /// IAP 驗證成功或恢復購買後呼叫此方法；本地值只作為 UI 快取，
+  /// 正式上線時仍應以商店收據或後端驗證結果為準。
+  static Future<void> saveAdRemoved(bool isRemoved) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(keyAdRemoved, isRemoved);
+  }
+
+  static Future<bool> loadAdRemoved() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(keyAdRemoved) ?? false;
   }
 
   // Meetup Filters
