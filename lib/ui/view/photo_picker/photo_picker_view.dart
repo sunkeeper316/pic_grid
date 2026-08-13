@@ -75,6 +75,11 @@ class _PhotoPickerViewState extends State<PhotoPickerView> {
     final paths = await PhotoManager.getAssetPathList(
       onlyAll: true,
       type: RequestType.image,
+      filterOption: FilterOptionGroup(
+        orders: const [
+          OrderOption(type: OrderOptionType.createDate, asc: false),
+        ],
+      ),
     );
     if (paths.isNotEmpty) {
       _allPhotos = paths.first;

@@ -7,6 +7,7 @@ import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pic_grid/generated/l10n.dart';
+import 'package:pic_grid/services/review_prompt_service.dart';
 import 'package:pic_grid/ui/view/photo_picker/photo_picker_view.dart';
 
 enum MainPhotoPosition { left, right, top, bottom }
@@ -94,6 +95,7 @@ class GridCollageViewController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      await ReviewPromptService.recordSuccessfulOperation();
     } catch (error) {
       Get.snackbar(
         S.current.error,

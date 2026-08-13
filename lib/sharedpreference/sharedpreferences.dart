@@ -20,6 +20,8 @@ class SharedPreference {
   static const String keySelectedMeetupGender = 'SelectedMeetupGender';
   static const String keyCommunityTabIndex = 'community_tab_index';
   static const String keyMessageTabIndex = 'message_tab_index';
+  static const String keyReviewCompletedOperationCount =
+      'review_completed_operation_count';
 
   static Future<void> saveSecurityCode(String securityCode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -230,6 +232,17 @@ class SharedPreference {
   static Future<int?> loadMessageTabIndex() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt(keyMessageTabIndex);
+  }
+
+  // App review completed operation count
+  static Future<void> saveReviewCompletedOperationCount(int count) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(keyReviewCompletedOperationCount, count);
+  }
+
+  static Future<int> loadReviewCompletedOperationCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(keyReviewCompletedOperationCount) ?? 0;
   }
 
   // Generic methods (use with caution, prefer specific methods above)
