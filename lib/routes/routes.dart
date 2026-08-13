@@ -8,6 +8,7 @@ class Routes {
   static const settingView = '/settingView';
   static const privacyPolicyView = '/privacyPolicyView';
   static const gridCollageView = '/gridCollageView';
+  static const subscriptionView = '/subscriptionView';
 
   // static const bottomNavigationPages = [
   //   community,

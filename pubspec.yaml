@@ -5,7 +5,7 @@ description: "A photo clip project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.9.2
@@ -38,6 +38,7 @@ dependencies:
   gal: ^2.3.2
   webview_flutter: ^4.8.0
   url_launcher: ^6.3.0
+  in_app_purchase: ^3.3.0
 
 dev_dependencies:
   flutter_test:

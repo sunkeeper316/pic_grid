@@ -23,33 +23,40 @@ class SettingView extends GetView<SettingViewController> {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: [
-            // _sectionTitle(S.of(context).settingSectionPurchase),
-            // Obx(() => _tile(
-            //       icon: Icons.block,
-            //       title: S.of(context).settingRemoveAds,
-            //       subtitle: controller.isAdRemoved.value ? S.of(context).settingUnlocked : S.of(context).settingOneTimePurchaseForever,
-            //       trailing: controller.isAdRemoved.value
-            //           ? const Icon(Icons.check_circle, color: Colors.greenAccent)
-            //           : const Icon(Icons.chevron_right, color: Colors.white38),
-            //       onTap: controller.isAdRemoved.value
-            //           ? null
-            //           : () {
-            //               // TODO: 接 in_app_purchase 開啟購買流程
-            //             },
-            //     )),
-            // const Divider(color: Colors.white12, height: 32),
+            _sectionTitle(S.of(context).settingSectionPurchase),
+            Obx(
+              () => _tile(
+                icon: Icons.workspace_premium_outlined,
+                title: S.of(context).settingRemoveAds,
+                subtitle: controller.isAdRemoved.value
+                    ? S.of(context).settingUnlocked
+                    : S.of(context).subscriptionEntrySubtitle,
+                trailing: controller.isAdRemoved.value
+                    ? const Icon(Icons.check_circle, color: Colors.greenAccent)
+                    : const Icon(Icons.chevron_right, color: Colors.white38),
+                onTap: () => Get.toNamed(Routes.subscriptionView),
+              ),
+            ),
+            const Divider(color: Colors.white12, height: 32),
             _sectionTitle(S.of(context).settingSectionAbout),
-            Obx(() => _tile(
-                  icon: Icons.info_outline,
-                  title: S.of(context).settingVersion,
-                  subtitle: controller.appVersion.value,
-                )),
+            Obx(
+              () => _tile(
+                icon: Icons.info_outline,
+                title: S.of(context).settingVersion,
+                subtitle: controller.appVersion.value,
+              ),
+            ),
             _tile(
               icon: Icons.mail_outline,
               title: S.of(context).settingContactUs,
               onTap: () async {
-                final Uri url = Uri.parse('https://sunkeeper316.github.io/sunkeeper_studio_website/');
-                if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                final Uri url = Uri.parse(
+                  'https://sunkeeper316.github.io/sunkeeper_studio_website/',
+                );
+                if (!await launchUrl(
+                  url,
+                  mode: LaunchMode.externalApplication,
+                )) {
                   debugPrint('Could not launch $url');
                 }
               },
@@ -68,17 +75,17 @@ class SettingView extends GetView<SettingViewController> {
   }
 
   Widget _sectionTitle(String text) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white54,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
-        ),
-      );
+    padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+    child: Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white54,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+      ),
+    ),
+  );
 
   Widget _tile({
     required IconData icon,
@@ -93,7 +100,8 @@ class SettingView extends GetView<SettingViewController> {
       subtitle: subtitle == null
           ? null
           : Text(subtitle, style: const TextStyle(color: Colors.white54)),
-      trailing: trailing ??
+      trailing:
+          trailing ??
           (onTap == null
               ? null
               : const Icon(Icons.chevron_right, color: Colors.white38)),

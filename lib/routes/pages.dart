@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:pic_grid/routes/routes.dart';
 
@@ -8,10 +7,13 @@ import 'package:pic_grid/ui/view/setting/setting_view.dart';
 import 'package:pic_grid/ui/view/setting/setting_view_binding.dart';
 import 'package:pic_grid/ui/view/start/start_view.dart';
 import 'package:pic_grid/ui/view/start/start_view_binding.dart';
+import 'package:pic_grid/ui/view/subscription_view/subscription_view.dart';
+import 'package:pic_grid/ui/view/subscription_view/subscription_view_binding.dart';
 import 'package:pic_grid/ui/view/web_view/privacy_policy_view/privacy_policy_view.dart';
 import 'package:pic_grid/ui/view/web_view/privacy_policy_view/privacy_policy_view_binding.dart';
 import 'package:pic_grid/ui/view/grid_collage/grid_collage_view.dart';
 import 'package:pic_grid/ui/view/grid_collage/grid_collage_view_binding.dart';
+
 class Pages {
   static final pages = [
     GetPage(
@@ -39,6 +41,11 @@ class Pages {
       name: Routes.gridCollageView,
       page: () => const GridCollageView(),
       binding: GridCollageViewBinding(),
+    ),
+    GetPage(
+      name: Routes.subscriptionView,
+      page: () => const SubscriptionView(),
+      binding: SubscriptionViewBinding(),
     ),
   ];
 
@@ -79,4 +86,3 @@ class Pages {
   //   return null;
   // }
 }
-
