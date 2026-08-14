@@ -68,7 +68,8 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
                       Text(
                         controller.isSubscribed.value
                             ? strings.subscriptionActive
-                            : strings.subscriptionPlanPreparing,
+                            : controller.product.value?.title ??
+                                  strings.subscriptionPlanPreparing,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
@@ -76,23 +77,55 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      if (!controller.isSubscribed.value &&
+                          controller.product.value != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          controller.product.value!.price,
+                          style: const TextStyle(
+                            color: Colors.amber,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                      if (controller.messageKey.value != null) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          _message(strings, controller.messageKey.value!),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.white70),
+                        ),
+                      ],
                       const SizedBox(height: 16),
                       FilledButton(
                         onPressed:
                             controller.isSubscribed.value ||
-                                controller.isLoading.value
+                                controller.isLoading.value ||
+                                controller.product.value == null
                             ? null
                             : controller.subscribe,
-                        child: Text(strings.subscriptionButton),
+                        child: controller.isLoading.value
+                            ? const SizedBox.square(
+                                dimension: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(strings.subscriptionButton),
                       ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              TextButton(
-                onPressed: controller.restorePurchases,
-                child: Text(strings.subscriptionRestore),
+              Obx(
+                () => TextButton(
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : controller.restorePurchases,
+                  child: Text(strings.subscriptionRestore),
+                ),
               ),
               TextButton(
                 onPressed: controller.openPrivacyAndTerms,
@@ -110,6 +143,19 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
       ),
     );
   }
+
+  String _message(S strings, String key) => switch (key) {
+    'subscriptionAndroidOnly' => strings.subscriptionAndroidOnly,
+    'subscriptionStoreUnavailable' => strings.subscriptionStoreUnavailable,
+    'subscriptionProductUnavailable' => strings.subscriptionProductUnavailable,
+    'subscriptionRestoring' => strings.subscriptionRestoring,
+    'subscriptionRestoreFinished' => strings.subscriptionRestoreFinished,
+    'subscriptionRestoreFailed' => strings.subscriptionRestoreFailed,
+    'subscriptionPurchasePending' => strings.subscriptionPurchasePending,
+    'subscriptionPurchaseSuccess' => strings.subscriptionPurchaseSuccess,
+    'subscriptionPurchaseCanceled' => strings.subscriptionPurchaseCanceled,
+    _ => strings.purchaseFailed,
+  };
 }
 
 class _Benefit extends StatelessWidget {

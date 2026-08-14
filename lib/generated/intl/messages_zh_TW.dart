@@ -100,6 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("請選擇 2～12 張照片"),
         "pickerOpenSettings": MessageLookupByLibrary.simpleMessage("開啟設定"),
         "pickerTitle": MessageLookupByLibrary.simpleMessage("選擇照片"),
+        "purchaseFailed": MessageLookupByLibrary.simpleMessage("購買失敗，請稍後再試。"),
         "reset": MessageLookupByLibrary.simpleMessage("重設"),
         "save": MessageLookupByLibrary.simpleMessage("儲存"),
         "saveFailed": m1,
@@ -120,6 +121,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "shapeRoundedRectangle": MessageLookupByLibrary.simpleMessage("圓角"),
         "shapeStar": MessageLookupByLibrary.simpleMessage("星形"),
         "subscriptionActive": MessageLookupByLibrary.simpleMessage("去廣告訂閱已啟用"),
+        "subscriptionAndroidOnly":
+            MessageLookupByLibrary.simpleMessage("目前僅支援 Android 訂閱。"),
         "subscriptionBenefitNoAds":
             MessageLookupByLibrary.simpleMessage("移除所有橫幅廣告"),
         "subscriptionBenefitUninterrupted":
@@ -133,9 +136,25 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("享受無廣告的 PicGrid"),
         "subscriptionPlanPreparing":
             MessageLookupByLibrary.simpleMessage("訂閱方案準備中"),
+        "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
+            "找不到訂閱方案，請確認已從內部測試連結安裝 App，且測試帳號已加入測試名單。"),
+        "subscriptionPurchaseCanceled":
+            MessageLookupByLibrary.simpleMessage("已取消購買。"),
+        "subscriptionPurchasePending":
+            MessageLookupByLibrary.simpleMessage("交易正在處理中…"),
+        "subscriptionPurchaseSuccess":
+            MessageLookupByLibrary.simpleMessage("訂閱成功，廣告已移除。"),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
             "價格與訂閱週期將以商店顯示資訊為準。自動續訂方案可隨時至商店帳號設定取消。"),
         "subscriptionRestore": MessageLookupByLibrary.simpleMessage("恢復購買"),
+        "subscriptionRestoreFailed":
+            MessageLookupByLibrary.simpleMessage("無法恢復購買，請稍後再試。"),
+        "subscriptionRestoreFinished":
+            MessageLookupByLibrary.simpleMessage("恢復購買檢查完成。"),
+        "subscriptionRestoring":
+            MessageLookupByLibrary.simpleMessage("正在恢復購買…"),
+        "subscriptionStoreUnavailable":
+            MessageLookupByLibrary.simpleMessage("目前無法連線至 Google Play 商店。"),
         "subscriptionTitle": MessageLookupByLibrary.simpleMessage("去廣告訂閱"),
         "success": MessageLookupByLibrary.simpleMessage("成功")
       };

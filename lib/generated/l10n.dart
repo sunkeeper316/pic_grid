@@ -900,6 +900,106 @@ class S {
     );
   }
 
+  /// `Subscriptions are currently available on Android only.`
+  String get subscriptionAndroidOnly {
+    return Intl.message(
+      'Subscriptions are currently available on Android only.',
+      name: 'subscriptionAndroidOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google Play is currently unavailable.`
+  String get subscriptionStoreUnavailable {
+    return Intl.message(
+      'Google Play is currently unavailable.',
+      name: 'subscriptionStoreUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester.`
+  String get subscriptionProductUnavailable {
+    return Intl.message(
+      'The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester.',
+      name: 'subscriptionProductUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restoring purchases…`
+  String get subscriptionRestoring {
+    return Intl.message(
+      'Restoring purchases…',
+      name: 'subscriptionRestoring',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase restoration check completed.`
+  String get subscriptionRestoreFinished {
+    return Intl.message(
+      'Purchase restoration check completed.',
+      name: 'subscriptionRestoreFinished',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchases could not be restored. Please try again later.`
+  String get subscriptionRestoreFailed {
+    return Intl.message(
+      'Purchases could not be restored. Please try again later.',
+      name: 'subscriptionRestoreFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your transaction is being processed…`
+  String get subscriptionPurchasePending {
+    return Intl.message(
+      'Your transaction is being processed…',
+      name: 'subscriptionPurchasePending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription successful. Ads have been removed.`
+  String get subscriptionPurchaseSuccess {
+    return Intl.message(
+      'Subscription successful. Ads have been removed.',
+      name: 'subscriptionPurchaseSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase canceled.`
+  String get subscriptionPurchaseCanceled {
+    return Intl.message(
+      'Purchase canceled.',
+      name: 'subscriptionPurchaseCanceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase failed. Please try again later.`
+  String get purchaseFailed {
+    return Intl.message(
+      'Purchase failed. Please try again later.',
+      name: 'purchaseFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Layer list (drag to reorder)`
   String get layerListTitle {
     return Intl.message(

@@ -1,24 +1,41 @@
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pic_grid/routes/routes.dart';
-import 'package:pic_grid/services/ad_visibility_service.dart';
+import 'package:pic_grid/services/in_app_purchase_service.dart';
 
 class SubscriptionViewController extends GetxController {
   final isSubscribed = false.obs;
-  final isLoading = false.obs;
+  final isLoading = true.obs;
+  final isStoreAvailable = false.obs;
+  final product = Rxn<ProductDetails>();
+  final messageKey = RxnString();
+
+  final InAppPurchaseService _purchaseService = InAppPurchaseService.instance;
 
   @override
   void onInit() {
     super.onInit();
-    isSubscribed.value = AdVisibilityService.instance.isSubscribed;
+    _purchaseService.addListener(_syncState);
+    _syncState();
+  }
+
+  void _syncState() {
+    isSubscribed.value = _purchaseService.isSubscribed;
+    isLoading.value = _purchaseService.isLoading;
+    isStoreAvailable.value = _purchaseService.isStoreAvailable;
+    product.value = _purchaseService.product;
+    messageKey.value = _purchaseService.messageKey;
   }
 
   void openPrivacyAndTerms() => Get.toNamed(Routes.privacyPolicyView);
 
-  void subscribe() {
-    // TODO: Query the configured store product and start the purchase flow.
-  }
+  Future<void> subscribe() => _purchaseService.purchase();
 
-  void restorePurchases() {
-    // TODO: Restore purchases after the store listener and product ID are configured.
+  Future<void> restorePurchases() => _purchaseService.restorePurchases();
+
+  @override
+  void onClose() {
+    _purchaseService.removeListener(_syncState);
+    super.onClose();
   }
 }

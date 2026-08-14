@@ -117,6 +117,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pickerOpenSettings":
             MessageLookupByLibrary.simpleMessage("Open settings"),
         "pickerTitle": MessageLookupByLibrary.simpleMessage("Select photos"),
+        "purchaseFailed": MessageLookupByLibrary.simpleMessage(
+            "Purchase failed. Please try again later."),
         "reset": MessageLookupByLibrary.simpleMessage("Reset"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "saveFailed": m1,
@@ -140,6 +142,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "shapeStar": MessageLookupByLibrary.simpleMessage("Star"),
         "subscriptionActive": MessageLookupByLibrary.simpleMessage(
             "Ad-free subscription is active"),
+        "subscriptionAndroidOnly": MessageLookupByLibrary.simpleMessage(
+            "Subscriptions are currently available on Android only."),
         "subscriptionBenefitNoAds":
             MessageLookupByLibrary.simpleMessage("Remove all banner ads"),
         "subscriptionBenefitUninterrupted":
@@ -155,10 +159,26 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enjoy PicGrid without ads"),
         "subscriptionPlanPreparing": MessageLookupByLibrary.simpleMessage(
             "Subscription plan coming soon"),
+        "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
+            "The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester."),
+        "subscriptionPurchaseCanceled":
+            MessageLookupByLibrary.simpleMessage("Purchase canceled."),
+        "subscriptionPurchasePending": MessageLookupByLibrary.simpleMessage(
+            "Your transaction is being processed…"),
+        "subscriptionPurchaseSuccess": MessageLookupByLibrary.simpleMessage(
+            "Subscription successful. Ads have been removed."),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
             "The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings."),
         "subscriptionRestore":
             MessageLookupByLibrary.simpleMessage("Restore purchases"),
+        "subscriptionRestoreFailed": MessageLookupByLibrary.simpleMessage(
+            "Purchases could not be restored. Please try again later."),
+        "subscriptionRestoreFinished": MessageLookupByLibrary.simpleMessage(
+            "Purchase restoration check completed."),
+        "subscriptionRestoring":
+            MessageLookupByLibrary.simpleMessage("Restoring purchases…"),
+        "subscriptionStoreUnavailable": MessageLookupByLibrary.simpleMessage(
+            "Google Play is currently unavailable."),
         "subscriptionTitle":
             MessageLookupByLibrary.simpleMessage("Ad-free subscription"),
         "success": MessageLookupByLibrary.simpleMessage("Success")

@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pic_grid/config/environment.dart';
 import 'package:pic_grid/services/ad_visibility_service.dart';
+import 'package:pic_grid/services/in_app_purchase_service.dart';
 
 import 'pic_grid_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AdVisibilityService.instance.initialize();
+  InAppPurchaseService.instance.initialize();
   if (Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
