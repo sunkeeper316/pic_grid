@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pic_grid/generated/l10n.dart';
 import 'package:pic_grid/resource/values/app_colors.dart';
@@ -24,10 +25,20 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(
-                Icons.workspace_premium_rounded,
-                color: Colors.amber,
-                size: 72,
+              Center(
+                child: SvgPicture.asset(
+                  'assets/Applogo.svg',
+                  width: 72,
+                  height: 72,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.amber,
+                    BlendMode.srcIn,
+                  ),
+                  placeholderBuilder: (_) => const SizedBox.square(
+                    dimension: 72,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               Text(

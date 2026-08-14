@@ -26,7 +26,7 @@ class SettingView extends GetView<SettingViewController> {
             _sectionTitle(S.of(context).settingSectionPurchase),
             Obx(
               () => _tile(
-                icon: Icons.workspace_premium_outlined,
+                icon: Icons.stars,
                 title: S.of(context).settingRemoveAds,
                 subtitle: controller.isAdRemoved.value
                     ? S.of(context).settingUnlocked
