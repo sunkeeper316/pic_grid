@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">PicGrid</string>
-    <!-- TODO: Replace with the PicGrid production AdMob App ID. -->
-    <string name="admob_app_id">PIC_GRID_ANDROID_ADMOB_APP_ID</string>
+    <string name="admob_app_id">ca-app-pub-3781354877489698~6539773986</string>
 </resources>
