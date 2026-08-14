@@ -26,129 +26,117 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "ageRestrictionMessage": MessageLookupByLibrary.simpleMessage(
-      "您必须年满 18 岁才能使用此功能",
-    ),
-    "ageRestrictionTitle": MessageLookupByLibrary.simpleMessage("年龄限制"),
-    "albumPermissionRequired": MessageLookupByLibrary.simpleMessage(
-      "需要相册权限才能保存",
-    ),
-    "appTitle": MessageLookupByLibrary.simpleMessage("PicGrids"),
-    "borderColor": MessageLookupByLibrary.simpleMessage("颜色"),
-    "borderNone": MessageLookupByLibrary.simpleMessage("无边框"),
-    "borderSettings": MessageLookupByLibrary.simpleMessage("边框"),
-    "borderThickness": MessageLookupByLibrary.simpleMessage("粗细"),
-    "cancel": MessageLookupByLibrary.simpleMessage("取消"),
-    "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("取消"),
-    "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("完成"),
-    "clipLoadingImage": MessageLookupByLibrary.simpleMessage("加载图片中..."),
-    "clipResetTooltip": MessageLookupByLibrary.simpleMessage("重置裁剪范围"),
-    "clipTitle": MessageLookupByLibrary.simpleMessage("裁剪图片"),
-    "delete": MessageLookupByLibrary.simpleMessage("删除"),
-    "done": MessageLookupByLibrary.simpleMessage("完成"),
-    "editorAddImageObjectTooltip": MessageLookupByLibrary.simpleMessage(
-      "新增图片对象",
-    ),
-    "editorBackgroundSettingTooltip": MessageLookupByLibrary.simpleMessage(
-      "背景设定",
-    ),
-    "editorBorderSettingsTooltip": MessageLookupByLibrary.simpleMessage("边框设置"),
-    "editorCanvasBackgroundSetting": MessageLookupByLibrary.simpleMessage(
-      "画布背景设定",
-    ),
-    "editorCropTooltip": MessageLookupByLibrary.simpleMessage("裁剪"),
-    "editorDeleteTooltip": MessageLookupByLibrary.simpleMessage("删除"),
-    "editorDiscardAndLeave": MessageLookupByLibrary.simpleMessage("放弃并返回"),
-    "editorDiscardMessage": MessageLookupByLibrary.simpleMessage(
-      "返回后当前的拼贴内容不会保留，需要重新编辑。",
-    ),
-    "editorDiscardTitle": MessageLookupByLibrary.simpleMessage("放弃当前编辑？"),
-    "editorKeepEditing": MessageLookupByLibrary.simpleMessage("继续编辑"),
-    "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage("图层列表"),
-    "editorLayoutSettingsTooltip": MessageLookupByLibrary.simpleMessage("更换排版"),
-    "editorOrPickSolidColor": MessageLookupByLibrary.simpleMessage("或选择单色背景："),
-    "editorPhotoSelectionRequired": MessageLookupByLibrary.simpleMessage(
-      "请从首页选择 2～12 张照片。",
-    ),
-    "editorPickBackgroundImage": MessageLookupByLibrary.simpleMessage(
-      "从相册选择底图图片",
-    ),
-    "editorReselectMessage": MessageLookupByLibrary.simpleMessage(
-      "重新选择后，当前的拼贴排版与编辑内容会被清除。",
-    ),
-    "editorReselectPhotos": MessageLookupByLibrary.simpleMessage("重新选择"),
-    "editorReselectTitle": MessageLookupByLibrary.simpleMessage("重新选择照片？"),
-    "editorSaveToAlbumTooltip": MessageLookupByLibrary.simpleMessage("保存至相册"),
-    "editorTitle": MessageLookupByLibrary.simpleMessage("编辑"),
-    "error": MessageLookupByLibrary.simpleMessage("错误"),
-    "homeBlankCanvas": MessageLookupByLibrary.simpleMessage("空白底图"),
-    "homePickPhoto": MessageLookupByLibrary.simpleMessage("选择照片"),
-    "homeSettingsTooltip": MessageLookupByLibrary.simpleMessage("设置"),
-    "homeTagline": MessageLookupByLibrary.simpleMessage("开始选择照片来做拼贴或剪贴"),
-    "imageProcessingFailed": MessageLookupByLibrary.simpleMessage("图片处理失败"),
-    "imageSavedToAlbum": MessageLookupByLibrary.simpleMessage("图片已保存至相册"),
-    "layerItem": m0,
-    "layerListEmpty": MessageLookupByLibrary.simpleMessage("目前没有叠加对象"),
-    "layerListTitle": MessageLookupByLibrary.simpleMessage("图层列表（拖动排序）"),
-    "layoutMainBottom": MessageLookupByLibrary.simpleMessage("主图置下"),
-    "layoutMainLeft": MessageLookupByLibrary.simpleMessage("主图置左"),
-    "layoutMainRight": MessageLookupByLibrary.simpleMessage("主图置右"),
-    "layoutMainTop": MessageLookupByLibrary.simpleMessage("主图置上"),
-    "layoutSettings": MessageLookupByLibrary.simpleMessage("选择排版"),
-    "layoutTranspose": MessageLookupByLibrary.simpleMessage("切换网格方向"),
-    "ok": MessageLookupByLibrary.simpleMessage("确定"),
-    "permissionError": MessageLookupByLibrary.simpleMessage("权限错误"),
-    "pickerAdd": MessageLookupByLibrary.simpleMessage("加入"),
-    "pickerLoadFailed": MessageLookupByLibrary.simpleMessage("部分照片无法加载，请重新选择。"),
-    "pickerMinimumHint": MessageLookupByLibrary.simpleMessage("请选择 2～12 张照片"),
-    "pickerOpenSettings": MessageLookupByLibrary.simpleMessage("打开设置"),
-    "pickerTitle": MessageLookupByLibrary.simpleMessage("选择照片"),
-    "reset": MessageLookupByLibrary.simpleMessage("重置"),
-    "save": MessageLookupByLibrary.simpleMessage("保存"),
-    "saveFailed": m1,
-    "settingContactUs": MessageLookupByLibrary.simpleMessage("联系我们"),
-    "settingOneTimePurchaseForever": MessageLookupByLibrary.simpleMessage(
-      "一次购买，永久去除",
-    ),
-    "settingPrivacyPolicyAndTerms": MessageLookupByLibrary.simpleMessage(
-      "隐私政策与使用条款",
-    ),
-    "settingRemoveAds": MessageLookupByLibrary.simpleMessage("去除广告"),
-    "settingSectionAbout": MessageLookupByLibrary.simpleMessage("关于"),
-    "settingSectionPurchase": MessageLookupByLibrary.simpleMessage("购买"),
-    "settingTitle": MessageLookupByLibrary.simpleMessage("设置"),
-    "settingUnlocked": MessageLookupByLibrary.simpleMessage("已解锁"),
-    "settingVersion": MessageLookupByLibrary.simpleMessage("版本"),
-    "shapeCircle": MessageLookupByLibrary.simpleMessage("圆形"),
-    "shapeHeart": MessageLookupByLibrary.simpleMessage("爱心"),
-    "shapeRectangle": MessageLookupByLibrary.simpleMessage("矩形"),
-    "shapeRoundedRectangle": MessageLookupByLibrary.simpleMessage("圆角"),
-    "shapeStar": MessageLookupByLibrary.simpleMessage("星形"),
-    "subscriptionActive": MessageLookupByLibrary.simpleMessage("去广告订阅已启用"),
-    "subscriptionBenefitNoAds": MessageLookupByLibrary.simpleMessage(
-      "移除所有横幅广告",
-    ),
-    "subscriptionBenefitUninterrupted": MessageLookupByLibrary.simpleMessage(
-      "不受干扰地使用所有拼贴功能",
-    ),
-    "subscriptionButton": MessageLookupByLibrary.simpleMessage("立即订阅"),
-    "subscriptionDescription": MessageLookupByLibrary.simpleMessage(
-      "订阅后将移除 App 内的广告，让拼贴过程更专注流畅。",
-    ),
-    "subscriptionEntrySubtitle": MessageLookupByLibrary.simpleMessage(
-      "订阅后移除所有广告",
-    ),
-    "subscriptionHeadline": MessageLookupByLibrary.simpleMessage(
-      "享受无广告的 PicGrid",
-    ),
-    "subscriptionPlanPreparing": MessageLookupByLibrary.simpleMessage(
-      "订阅方案准备中",
-    ),
-    "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
-      "价格与订阅周期将以商店显示信息为准。自动续订方案可随时至商店账号设置取消。",
-    ),
-    "subscriptionRestore": MessageLookupByLibrary.simpleMessage("恢复购买"),
-    "subscriptionTitle": MessageLookupByLibrary.simpleMessage("去广告订阅"),
-    "success": MessageLookupByLibrary.simpleMessage("成功"),
-  };
+        "ageRestrictionMessage":
+            MessageLookupByLibrary.simpleMessage("您必须年满 18 岁才能使用此功能"),
+        "ageRestrictionTitle": MessageLookupByLibrary.simpleMessage("年龄限制"),
+        "albumPermissionRequired":
+            MessageLookupByLibrary.simpleMessage("需要相册权限才能保存"),
+        "appTitle": MessageLookupByLibrary.simpleMessage("PicGrids"),
+        "borderColor": MessageLookupByLibrary.simpleMessage("颜色"),
+        "borderNone": MessageLookupByLibrary.simpleMessage("无边框"),
+        "borderSettings": MessageLookupByLibrary.simpleMessage("边框"),
+        "borderThickness": MessageLookupByLibrary.simpleMessage("粗细"),
+        "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("取消"),
+        "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("完成"),
+        "clipLoadingImage": MessageLookupByLibrary.simpleMessage("加载图片中..."),
+        "clipResetTooltip": MessageLookupByLibrary.simpleMessage("重置裁剪范围"),
+        "clipTitle": MessageLookupByLibrary.simpleMessage("裁剪图片"),
+        "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "done": MessageLookupByLibrary.simpleMessage("完成"),
+        "editorAddImageObjectTooltip":
+            MessageLookupByLibrary.simpleMessage("新增图片对象"),
+        "editorBackgroundSettingTooltip":
+            MessageLookupByLibrary.simpleMessage("背景设定"),
+        "editorBorderSettingsTooltip":
+            MessageLookupByLibrary.simpleMessage("边框设置"),
+        "editorCanvasBackgroundSetting":
+            MessageLookupByLibrary.simpleMessage("画布背景设定"),
+        "editorCropTooltip": MessageLookupByLibrary.simpleMessage("裁剪"),
+        "editorDeleteTooltip": MessageLookupByLibrary.simpleMessage("删除"),
+        "editorDiscardAndLeave": MessageLookupByLibrary.simpleMessage("放弃并返回"),
+        "editorDiscardMessage":
+            MessageLookupByLibrary.simpleMessage("返回后当前的拼贴内容不会保留，需要重新编辑。"),
+        "editorDiscardTitle": MessageLookupByLibrary.simpleMessage("放弃当前编辑？"),
+        "editorKeepEditing": MessageLookupByLibrary.simpleMessage("继续编辑"),
+        "editorLayerListTooltip": MessageLookupByLibrary.simpleMessage("图层列表"),
+        "editorLayoutSettingsTooltip":
+            MessageLookupByLibrary.simpleMessage("更换排版"),
+        "editorOrPickSolidColor":
+            MessageLookupByLibrary.simpleMessage("或选择单色背景："),
+        "editorPhotoSelectionRequired":
+            MessageLookupByLibrary.simpleMessage("请从首页选择 2～12 张照片。"),
+        "editorPickBackgroundImage":
+            MessageLookupByLibrary.simpleMessage("从相册选择底图图片"),
+        "editorReselectMessage":
+            MessageLookupByLibrary.simpleMessage("重新选择后，当前的拼贴排版与编辑内容会被清除。"),
+        "editorReselectPhotos": MessageLookupByLibrary.simpleMessage("重新选择"),
+        "editorReselectTitle": MessageLookupByLibrary.simpleMessage("重新选择照片？"),
+        "editorSaveToAlbumTooltip":
+            MessageLookupByLibrary.simpleMessage("保存至相册"),
+        "editorTitle": MessageLookupByLibrary.simpleMessage("编辑"),
+        "error": MessageLookupByLibrary.simpleMessage("错误"),
+        "homeBlankCanvas": MessageLookupByLibrary.simpleMessage("空白底图"),
+        "homePickPhoto": MessageLookupByLibrary.simpleMessage("选择照片"),
+        "homeSettingsTooltip": MessageLookupByLibrary.simpleMessage("设置"),
+        "homeTagline": MessageLookupByLibrary.simpleMessage("开始选择照片来做拼贴或剪贴"),
+        "imageProcessingFailed": MessageLookupByLibrary.simpleMessage("图片处理失败"),
+        "imageSavedToAlbum": MessageLookupByLibrary.simpleMessage("图片已保存至相册"),
+        "layerItem": m0,
+        "layerListEmpty": MessageLookupByLibrary.simpleMessage("目前没有叠加对象"),
+        "layerListTitle": MessageLookupByLibrary.simpleMessage("图层列表（拖动排序）"),
+        "layoutMainBottom": MessageLookupByLibrary.simpleMessage("主图置下"),
+        "layoutMainLeft": MessageLookupByLibrary.simpleMessage("主图置左"),
+        "layoutMainRight": MessageLookupByLibrary.simpleMessage("主图置右"),
+        "layoutMainTop": MessageLookupByLibrary.simpleMessage("主图置上"),
+        "layoutSettings": MessageLookupByLibrary.simpleMessage("选择排版"),
+        "layoutTranspose": MessageLookupByLibrary.simpleMessage("切换网格方向"),
+        "ok": MessageLookupByLibrary.simpleMessage("确定"),
+        "permissionError": MessageLookupByLibrary.simpleMessage("权限错误"),
+        "pickerAdd": MessageLookupByLibrary.simpleMessage("加入"),
+        "pickerLoadFailed":
+            MessageLookupByLibrary.simpleMessage("部分照片无法加载，请重新选择。"),
+        "pickerMinimumHint":
+            MessageLookupByLibrary.simpleMessage("请选择 2～12 张照片"),
+        "pickerOpenSettings": MessageLookupByLibrary.simpleMessage("打开设置"),
+        "pickerTitle": MessageLookupByLibrary.simpleMessage("选择照片"),
+        "reset": MessageLookupByLibrary.simpleMessage("重置"),
+        "save": MessageLookupByLibrary.simpleMessage("保存"),
+        "saveFailed": m1,
+        "settingContactUs": MessageLookupByLibrary.simpleMessage("联系我们"),
+        "settingOneTimePurchaseForever":
+            MessageLookupByLibrary.simpleMessage("一次购买，永久去除"),
+        "settingPrivacyPolicyAndTerms":
+            MessageLookupByLibrary.simpleMessage("隐私政策与使用条款"),
+        "settingRemoveAds": MessageLookupByLibrary.simpleMessage("去除广告"),
+        "settingSectionAbout": MessageLookupByLibrary.simpleMessage("关于"),
+        "settingSectionPurchase": MessageLookupByLibrary.simpleMessage("购买"),
+        "settingTitle": MessageLookupByLibrary.simpleMessage("设置"),
+        "settingUnlocked": MessageLookupByLibrary.simpleMessage("已解锁"),
+        "settingVersion": MessageLookupByLibrary.simpleMessage("版本"),
+        "shapeCircle": MessageLookupByLibrary.simpleMessage("圆形"),
+        "shapeHeart": MessageLookupByLibrary.simpleMessage("爱心"),
+        "shapeRectangle": MessageLookupByLibrary.simpleMessage("矩形"),
+        "shapeRoundedRectangle": MessageLookupByLibrary.simpleMessage("圆角"),
+        "shapeStar": MessageLookupByLibrary.simpleMessage("星形"),
+        "subscriptionActive": MessageLookupByLibrary.simpleMessage("去广告订阅已启用"),
+        "subscriptionBenefitNoAds":
+            MessageLookupByLibrary.simpleMessage("移除所有横幅广告"),
+        "subscriptionBenefitUninterrupted":
+            MessageLookupByLibrary.simpleMessage("不受干扰地使用所有拼贴功能"),
+        "subscriptionButton": MessageLookupByLibrary.simpleMessage("立即订阅"),
+        "subscriptionDescription":
+            MessageLookupByLibrary.simpleMessage("订阅后将移除 App 内的广告，让拼贴过程更专注流畅。"),
+        "subscriptionEntrySubtitle":
+            MessageLookupByLibrary.simpleMessage("订阅后移除所有广告"),
+        "subscriptionHeadline":
+            MessageLookupByLibrary.simpleMessage("享受无广告的 PicGrid"),
+        "subscriptionPlanPreparing":
+            MessageLookupByLibrary.simpleMessage("订阅方案准备中"),
+        "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
+            "价格与订阅周期将以商店显示信息为准。自动续订方案可随时至商店账号设置取消。"),
+        "subscriptionRestore": MessageLookupByLibrary.simpleMessage("恢复购买"),
+        "subscriptionTitle": MessageLookupByLibrary.simpleMessage("去广告订阅"),
+        "success": MessageLookupByLibrary.simpleMessage("成功")
+      };
 }

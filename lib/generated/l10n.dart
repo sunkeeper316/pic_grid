@@ -18,10 +18,8 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(
-      _current != null,
-      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
-    );
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
@@ -43,10 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(
-      instance != null,
-      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
-    );
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -56,47 +52,92 @@ class S {
 
   /// `PicGrids`
   String get appTitle {
-    return Intl.message('PicGrids', name: 'appTitle', desc: '', args: []);
+    return Intl.message(
+      'PicGrids',
+      name: 'appTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `OK`
   String get ok {
-    return Intl.message('OK', name: 'ok', desc: '', args: []);
+    return Intl.message(
+      'OK',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Cancel`
   String get cancel {
-    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Reset`
   String get reset {
-    return Intl.message('Reset', name: 'reset', desc: '', args: []);
+    return Intl.message(
+      'Reset',
+      name: 'reset',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Done`
   String get done {
-    return Intl.message('Done', name: 'done', desc: '', args: []);
+    return Intl.message(
+      'Done',
+      name: 'done',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Delete`
   String get delete {
-    return Intl.message('Delete', name: 'delete', desc: '', args: []);
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Save`
   String get save {
-    return Intl.message('Save', name: 'save', desc: '', args: []);
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Error`
   String get error {
-    return Intl.message('Error', name: 'error', desc: '', args: []);
+    return Intl.message(
+      'Error',
+      name: 'error',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Success`
   String get success {
-    return Intl.message('Success', name: 'success', desc: '', args: []);
+    return Intl.message(
+      'Success',
+      name: 'success',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Start selecting photos for collage or clipping`
@@ -151,7 +192,12 @@ class S {
 
   /// `Add`
   String get pickerAdd {
-    return Intl.message('Add', name: 'pickerAdd', desc: '', args: []);
+    return Intl.message(
+      'Add',
+      name: 'pickerAdd',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Select 2 to 12 photos`
@@ -186,12 +232,22 @@ class S {
 
   /// `Edit`
   String get editorTitle {
-    return Intl.message('Edit', name: 'editorTitle', desc: '', args: []);
+    return Intl.message(
+      'Edit',
+      name: 'editorTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Crop`
   String get editorCropTooltip {
-    return Intl.message('Crop', name: 'editorCropTooltip', desc: '', args: []);
+    return Intl.message(
+      'Crop',
+      name: 'editorCropTooltip',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Delete`
@@ -296,7 +352,12 @@ class S {
 
   /// `Main top`
   String get layoutMainTop {
-    return Intl.message('Main top', name: 'layoutMainTop', desc: '', args: []);
+    return Intl.message(
+      'Main top',
+      name: 'layoutMainTop',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Main bottom`
@@ -321,12 +382,22 @@ class S {
 
   /// `Border`
   String get borderSettings {
-    return Intl.message('Border', name: 'borderSettings', desc: '', args: []);
+    return Intl.message(
+      'Border',
+      name: 'borderSettings',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Color`
   String get borderColor {
-    return Intl.message('Color', name: 'borderColor', desc: '', args: []);
+    return Intl.message(
+      'Color',
+      name: 'borderColor',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Thickness`
@@ -341,7 +412,12 @@ class S {
 
   /// `None`
   String get borderNone {
-    return Intl.message('None', name: 'borderNone', desc: '', args: []);
+    return Intl.message(
+      'None',
+      name: 'borderNone',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Canvas background settings`
@@ -526,7 +602,12 @@ class S {
 
   /// `Crop image`
   String get clipTitle {
-    return Intl.message('Crop image', name: 'clipTitle', desc: '', args: []);
+    return Intl.message(
+      'Crop image',
+      name: 'clipTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Loading image...`
@@ -561,7 +642,12 @@ class S {
 
   /// `Done`
   String get clipDoneTooltip {
-    return Intl.message('Done', name: 'clipDoneTooltip', desc: '', args: []);
+    return Intl.message(
+      'Done',
+      name: 'clipDoneTooltip',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Rectangle`
@@ -586,22 +672,42 @@ class S {
 
   /// `Circle`
   String get shapeCircle {
-    return Intl.message('Circle', name: 'shapeCircle', desc: '', args: []);
+    return Intl.message(
+      'Circle',
+      name: 'shapeCircle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Heart`
   String get shapeHeart {
-    return Intl.message('Heart', name: 'shapeHeart', desc: '', args: []);
+    return Intl.message(
+      'Heart',
+      name: 'shapeHeart',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Star`
   String get shapeStar {
-    return Intl.message('Star', name: 'shapeStar', desc: '', args: []);
+    return Intl.message(
+      'Star',
+      name: 'shapeStar',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Settings`
   String get settingTitle {
-    return Intl.message('Settings', name: 'settingTitle', desc: '', args: []);
+    return Intl.message(
+      'Settings',
+      name: 'settingTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Purchase`
@@ -656,7 +762,12 @@ class S {
 
   /// `Version`
   String get settingVersion {
-    return Intl.message('Version', name: 'settingVersion', desc: '', args: []);
+    return Intl.message(
+      'Version',
+      name: 'settingVersion',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Contact us`
