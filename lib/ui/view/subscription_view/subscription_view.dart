@@ -110,19 +110,26 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
                       ],
                       const SizedBox(height: 16),
                       FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primaryColorLight,
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor: const Color(0xFF666269),
+                          disabledForegroundColor: Colors.white70,
+                          minimumSize: const Size(180, 48),
+                        ),
                         onPressed:
-                            controller.isSubscribed.value ||
-                                controller.isLoading.value ||
-                                controller.product.value == null
+                        controller.isSubscribed.value ||
+                            controller.isLoading.value ||
+                            controller.product.value == null
                             ? null
                             : controller.subscribe,
                         child: controller.isLoading.value
                             ? const SizedBox.square(
-                                dimension: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
+                          dimension: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
                             : Text(strings.subscriptionButton),
                       ),
                     ],
@@ -132,6 +139,9 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
               const SizedBox(height: 12),
               Obx(
                 () => TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primaryColorW,
+                  ),
                   onPressed: controller.isLoading.value
                       ? null
                       : controller.restorePurchases,
@@ -139,6 +149,9 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
                 ),
               ),
               TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primaryColorW,
+                ),
                 onPressed: controller.openPrivacyAndTerms,
                 child: Text(strings.settingPrivacyPolicyAndTerms),
               ),
@@ -146,7 +159,7 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
               Text(
                 strings.subscriptionRenewalNotice,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white54, fontSize: 12),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
