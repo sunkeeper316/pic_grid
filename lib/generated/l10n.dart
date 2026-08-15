@@ -820,20 +820,20 @@ class S {
     );
   }
 
-  /// `Remove ads throughout the app for a focused, uninterrupted creative experience.`
+  /// `Your subscription is our greatest support, motivating us to continuously improve PicGrids and bring you a better creative experience.`
   String get subscriptionDescription {
     return Intl.message(
-      'Remove ads throughout the app for a focused, uninterrupted creative experience.',
+      'Your subscription is our greatest support, motivating us to continuously improve PicGrids and bring you a better creative experience.',
       name: 'subscriptionDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `Remove all banner ads`
+  /// `Remove all ads`
   String get subscriptionBenefitNoAds {
     return Intl.message(
-      'Remove all banner ads',
+      'Remove all ads',
       name: 'subscriptionBenefitNoAds',
       desc: '',
       args: [],

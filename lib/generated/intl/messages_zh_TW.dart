@@ -124,12 +124,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionAndroidOnly":
             MessageLookupByLibrary.simpleMessage("目前僅支援 Android 訂閱。"),
         "subscriptionBenefitNoAds":
-            MessageLookupByLibrary.simpleMessage("移除所有橫幅廣告"),
+            MessageLookupByLibrary.simpleMessage("移除所有廣告"),
         "subscriptionBenefitUninterrupted":
             MessageLookupByLibrary.simpleMessage("不受干擾地使用所有拼貼功能"),
         "subscriptionButton": MessageLookupByLibrary.simpleMessage("立即訂閱"),
-        "subscriptionDescription":
-            MessageLookupByLibrary.simpleMessage("訂閱後將移除 App 內的廣告，讓拼貼過程更專注流暢。"),
+        "subscriptionDescription": MessageLookupByLibrary.simpleMessage(
+            "您的訂閱是對我們最大的支持，讓我們更有動力持續改善 PicGrids，帶來更好的創作體驗。"),
         "subscriptionEntrySubtitle":
             MessageLookupByLibrary.simpleMessage("訂閱後移除所有廣告"),
         "subscriptionHeadline":

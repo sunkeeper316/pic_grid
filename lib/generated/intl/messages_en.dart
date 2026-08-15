@@ -145,14 +145,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionAndroidOnly": MessageLookupByLibrary.simpleMessage(
             "Subscriptions are currently available on Android only."),
         "subscriptionBenefitNoAds":
-            MessageLookupByLibrary.simpleMessage("Remove all banner ads"),
+            MessageLookupByLibrary.simpleMessage("Remove all ads"),
         "subscriptionBenefitUninterrupted":
             MessageLookupByLibrary.simpleMessage(
                 "Use every collage feature without interruptions"),
         "subscriptionButton":
             MessageLookupByLibrary.simpleMessage("Subscribe now"),
         "subscriptionDescription": MessageLookupByLibrary.simpleMessage(
-            "Remove ads throughout the app for a focused, uninterrupted creative experience."),
+            "Your subscription is our greatest support, motivating us to continuously improve PicGrids and bring you a better creative experience."),
         "subscriptionEntrySubtitle":
             MessageLookupByLibrary.simpleMessage("Subscribe to remove all ads"),
         "subscriptionHeadline":
