@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pic_grid/generated/l10n.dart';
@@ -356,20 +357,16 @@ class GridCollageView extends GetView<GridCollageViewController> {
               ) {
                 children.add(
                   Positioned(
+                    key: ValueKey(selectedImages[index].path),
                     top: top,
                     left: left,
                     width: cellWidth,
                     height: cellHeight,
-                    child: Container(
-                      foregroundDecoration: BoxDecoration(
-                        border: borderWidth > 0
-                            ? Border.all(color: borderColor, width: borderWidth)
-                            : null,
-                      ),
-                      child: Image.file(
-                        File(selectedImages[index].path),
-                        fit: BoxFit.cover,
-                      ),
+                    child: _EditablePhotoCell(
+                      file: File(selectedImages[index].path),
+                      borderWidth: borderWidth,
+                      borderColor: borderColor,
+                      gesturesEnabled: !isSaving,
                     ),
                   ),
                 );
@@ -745,6 +742,216 @@ class _LayoutOption extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EditablePhotoCell extends StatefulWidget {
+  const _EditablePhotoCell({
+    required this.file,
+    required this.borderWidth,
+    required this.borderColor,
+    required this.gesturesEnabled,
+  });
+
+  final File file;
+  final double borderWidth;
+  final Color borderColor;
+  final bool gesturesEnabled;
+
+  @override
+  State<_EditablePhotoCell> createState() => _EditablePhotoCellState();
+}
+
+class _EditablePhotoCellState extends State<_EditablePhotoCell> {
+  static const _maxZoom = 5.0;
+
+  ImageStream? _imageStream;
+  ImageStreamListener? _imageListener;
+  Size? _imageSize;
+  double _zoom = 1;
+  Offset _offset = Offset.zero;
+  double _startZoom = 1;
+  Offset _startOffset = Offset.zero;
+  Offset _startFocalPoint = Offset.zero;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _resolveImageSize();
+  }
+
+  @override
+  void didUpdateWidget(covariant _EditablePhotoCell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.file.path != widget.file.path) {
+      _zoom = 1;
+      _offset = Offset.zero;
+      _imageSize = null;
+      _resolveImageSize();
+    }
+  }
+
+  void _resolveImageSize() {
+    _removeImageListener();
+    final stream = FileImage(
+      widget.file,
+    ).resolve(createLocalImageConfiguration(context));
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener((info, _) {
+      if (!mounted) return;
+      setState(() {
+        _imageSize = Size(
+          info.image.width.toDouble(),
+          info.image.height.toDouble(),
+        );
+      });
+    });
+    _imageStream = stream;
+    _imageListener = listener;
+    stream.addListener(listener);
+  }
+
+  void _removeImageListener() {
+    final stream = _imageStream;
+    final listener = _imageListener;
+    if (stream != null && listener != null) {
+      stream.removeListener(listener);
+    }
+    _imageStream = null;
+    _imageListener = null;
+  }
+
+  Offset _clampOffset({
+    required Offset offset,
+    required Size viewport,
+    required Size image,
+    required double zoom,
+  }) {
+    final coverScale = math.max(
+      viewport.width / image.width,
+      viewport.height / image.height,
+    );
+    final displayedWidth = image.width * coverScale * zoom;
+    final displayedHeight = image.height * coverScale * zoom;
+    final maxX = math.max(0.0, (displayedWidth - viewport.width) / 2);
+    final maxY = math.max(0.0, (displayedHeight - viewport.height) / 2);
+    return Offset(offset.dx.clamp(-maxX, maxX), offset.dy.clamp(-maxY, maxY));
+  }
+
+  void _resetCrop() {
+    setState(() {
+      _zoom = 1;
+      _offset = Offset.zero;
+    });
+  }
+
+  @override
+  void dispose() {
+    _removeImageListener();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final viewport = Size(constraints.maxWidth, constraints.maxHeight);
+        final imageSize = _imageSize;
+        Widget image;
+
+        if (imageSize == null || viewport.isEmpty) {
+          image = Positioned.fill(
+            child: Image.file(widget.file, fit: BoxFit.cover),
+          );
+        } else {
+          final coverScale = math.max(
+            viewport.width / imageSize.width,
+            viewport.height / imageSize.height,
+          );
+          final displayedWidth = imageSize.width * coverScale * _zoom;
+          final displayedHeight = imageSize.height * coverScale * _zoom;
+          final offset = _clampOffset(
+            offset: _offset,
+            viewport: viewport,
+            image: imageSize,
+            zoom: _zoom,
+          );
+          image = Positioned(
+            left: (viewport.width - displayedWidth) / 2 + offset.dx,
+            top: (viewport.height - displayedHeight) / 2 + offset.dy,
+            width: displayedWidth,
+            height: displayedHeight,
+            child: Image.file(widget.file, fit: BoxFit.fill),
+          );
+        }
+
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onDoubleTap: widget.gesturesEnabled ? _resetCrop : null,
+          onScaleStart: widget.gesturesEnabled && imageSize != null
+              ? (details) {
+                  _startZoom = _zoom;
+                  _startOffset = _clampOffset(
+                    offset: _offset,
+                    viewport: viewport,
+                    image: imageSize,
+                    zoom: _zoom,
+                  );
+                  _startFocalPoint = details.localFocalPoint;
+                }
+              : null,
+          onScaleUpdate: widget.gesturesEnabled && imageSize != null
+              ? (details) {
+                  final zoom = (_startZoom * details.scale).clamp(
+                    1.0,
+                    _maxZoom,
+                  );
+                  final viewportCenter = Offset(
+                    viewport.width / 2,
+                    viewport.height / 2,
+                  );
+                  final contentPoint =
+                      (_startFocalPoint - viewportCenter - _startOffset) /
+                      _startZoom;
+                  final offset =
+                      details.localFocalPoint -
+                      viewportCenter -
+                      contentPoint * zoom;
+                  setState(() {
+                    _zoom = zoom;
+                    _offset = _clampOffset(
+                      offset: offset,
+                      viewport: viewport,
+                      image: imageSize,
+                      zoom: zoom,
+                    );
+                  });
+                }
+              : null,
+          child: ClipRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                image,
+                if (widget.borderWidth > 0)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: widget.borderColor,
+                            width: widget.borderWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
