@@ -21,6 +21,7 @@ class GridCollageViewController extends GetxController {
   var borderColor = Colors.white.obs;
   var mainPhotoPosition = MainPhotoPosition.left.obs;
   var evenLayoutByColumns = true.obs;
+  var cropRevision = 0.obs;
 
   // Example state for grid layout proportions
   var rowProportions = <double>[].obs;
@@ -109,6 +110,7 @@ class GridCollageViewController extends GetxController {
   }
 
   void _initializeProportions() {
+    cropRevision.value++;
     int count = selectedImages.length;
     int rows = 1;
     int cols = 1;

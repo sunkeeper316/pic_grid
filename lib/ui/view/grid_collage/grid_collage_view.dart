@@ -325,6 +325,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
           final borderWidth = controller.borderWidth.value;
           final borderColor = controller.borderColor.value;
           final isSaving = controller.isSaving.value;
+          final cropRevision = controller.cropRevision.value;
           final mainPhotoPosition = controller.mainPhotoPosition.value;
           final evenLayoutByColumns = controller.evenLayoutByColumns.value;
 
@@ -357,7 +358,9 @@ class GridCollageView extends GetView<GridCollageViewController> {
               ) {
                 children.add(
                   Positioned(
-                    key: ValueKey(selectedImages[index].path),
+                    key: ValueKey(
+                      '$cropRevision:${selectedImages[index].path}',
+                    ),
                     top: top,
                     left: left,
                     width: cellWidth,
@@ -366,6 +369,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
                       file: File(selectedImages[index].path),
                       borderWidth: borderWidth,
                       borderColor: borderColor,
+                      backgroundColor: Colors.white,
                       gesturesEnabled: !isSaving,
                     ),
                   ),
@@ -751,12 +755,14 @@ class _EditablePhotoCell extends StatefulWidget {
     required this.file,
     required this.borderWidth,
     required this.borderColor,
+    required this.backgroundColor,
     required this.gesturesEnabled,
   });
 
   final File file;
   final double borderWidth;
   final Color borderColor;
+  final Color backgroundColor;
   final bool gesturesEnabled;
 
   @override
@@ -764,6 +770,7 @@ class _EditablePhotoCell extends StatefulWidget {
 }
 
 class _EditablePhotoCellState extends State<_EditablePhotoCell> {
+  static const _minZoom = 0.2;
   static const _maxZoom = 5.0;
 
   ImageStream? _imageStream;
@@ -834,8 +841,8 @@ class _EditablePhotoCellState extends State<_EditablePhotoCell> {
     );
     final displayedWidth = image.width * coverScale * zoom;
     final displayedHeight = image.height * coverScale * zoom;
-    final maxX = math.max(0.0, (displayedWidth - viewport.width) / 2);
-    final maxY = math.max(0.0, (displayedHeight - viewport.height) / 2);
+    final maxX = (displayedWidth - viewport.width).abs() / 2;
+    final maxY = (displayedHeight - viewport.height).abs() / 2;
     return Offset(offset.dx.clamp(-maxX, maxX), offset.dy.clamp(-maxY, maxY));
   }
 
@@ -904,7 +911,7 @@ class _EditablePhotoCellState extends State<_EditablePhotoCell> {
           onScaleUpdate: widget.gesturesEnabled && imageSize != null
               ? (details) {
                   final zoom = (_startZoom * details.scale).clamp(
-                    1.0,
+                    _minZoom,
                     _maxZoom,
                   );
                   final viewportCenter = Offset(
@@ -933,6 +940,7 @@ class _EditablePhotoCellState extends State<_EditablePhotoCell> {
             child: Stack(
               fit: StackFit.expand,
               children: [
+                ColoredBox(color: widget.backgroundColor),
                 image,
                 if (widget.borderWidth > 0)
                   Positioned.fill(
