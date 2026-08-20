@@ -526,17 +526,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                       left: left,
                       width: handleWidth,
                       height: 36,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                      child: _DraggableDividerHandle(
+                        axis: Axis.horizontal,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        onDrag: onDrag,
                         onDoubleTap: controller.toggleLayout,
-                        onVerticalDragUpdate: (details) =>
-                            onDrag(details.delta.dy),
-                        child: Center(
-                          child: DividerHandle(
-                            axis: Axis.horizontal,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
                       ),
                     ),
                   );
@@ -554,17 +548,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                       left: left - 18,
                       width: 36,
                       height: handleHeight,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                      child: _DraggableDividerHandle(
+                        axis: Axis.vertical,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        onDrag: onDrag,
                         onDoubleTap: controller.toggleLayout,
-                        onHorizontalDragUpdate: (details) =>
-                            onDrag(details.delta.dx),
-                        child: Center(
-                          child: DividerHandle(
-                            axis: Axis.vertical,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
                       ),
                     ),
                   );
@@ -755,6 +743,63 @@ class _LayoutOption extends StatelessWidget {
             const SizedBox(height: 8),
             Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DraggableDividerHandle extends StatefulWidget {
+  const _DraggableDividerHandle({
+    required this.axis,
+    required this.color,
+    required this.onDrag,
+    required this.onDoubleTap,
+  });
+
+  final Axis axis;
+  final Color color;
+  final ValueChanged<double> onDrag;
+  final VoidCallback onDoubleTap;
+
+  @override
+  State<_DraggableDividerHandle> createState() =>
+      _DraggableDividerHandleState();
+}
+
+class _DraggableDividerHandleState extends State<_DraggableDividerHandle> {
+  bool _showGuide = false;
+
+  void _setGuideVisible(bool visible) {
+    if (_showGuide != visible) {
+      setState(() => _showGuide = visible);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final horizontal = widget.axis == Axis.horizontal;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onDoubleTap: widget.onDoubleTap,
+      onVerticalDragStart: horizontal ? (_) => _setGuideVisible(true) : null,
+      onVerticalDragUpdate: horizontal
+          ? (details) => widget.onDrag(details.delta.dy)
+          : null,
+      onVerticalDragEnd: horizontal ? (_) => _setGuideVisible(false) : null,
+      onVerticalDragCancel: horizontal ? () => _setGuideVisible(false) : null,
+      onHorizontalDragStart: horizontal ? null : (_) => _setGuideVisible(true),
+      onHorizontalDragUpdate: horizontal
+          ? null
+          : (details) => widget.onDrag(details.delta.dx),
+      onHorizontalDragEnd: horizontal ? null : (_) => _setGuideVisible(false),
+      onHorizontalDragCancel: horizontal ? null : () => _setGuideVisible(false),
+      child: Center(
+        child: DividerHandle(
+          axis: widget.axis,
+          color: widget.color,
+          showGuide: _showGuide,
         ),
       ),
     );
