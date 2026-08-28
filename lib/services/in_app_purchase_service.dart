@@ -7,13 +7,12 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:pic_grid/constants/purchase_ids.dart';
 import 'package:pic_grid/services/ad_visibility_service.dart';
 
-/// App-wide Google Play purchase coordinator.
+/// App-wide Google Play and App Store purchase coordinator.
 ///
 /// It starts listening at app launch and remains alive when routes change.
 class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
   InAppPurchaseService._();
 
-  static const productId = PurchaseIds.adFreeSubscription;
   static final InAppPurchaseService instance = InAppPurchaseService._();
 
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
@@ -32,6 +31,12 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
 
   bool get isSubscribed => AdVisibilityService.instance.isSubscribed;
 
+  String? get productId {
+    if (Platform.isAndroid) return PurchaseIds.androidAdFreeSubscription;
+    if (Platform.isIOS) return PurchaseIds.iosAdFreeSubscription;
+    return null;
+  }
+
   void initialize() {
     if (_initialized) return;
     _initialized = true;
@@ -49,24 +54,32 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
     unawaited(syncSubscriptionStatus());
   }
 
-  /// Reconciles cached access with subscriptions owned by the Play account.
+  /// Reconciles cached access with subscriptions owned by the store account.
   /// A failed query never removes cached access.
   Future<void> syncSubscriptionStatus() async {
-    if (!Platform.isAndroid || _isSyncingSubscription) return;
+    if ((!Platform.isAndroid && !Platform.isIOS) || _isSyncingSubscription) {
+      return;
+    }
     _isSyncingSubscription = true;
 
     try {
       final available = await _inAppPurchase.isAvailable();
       if (!available) return;
 
+      // Google Play exposes owned purchases directly. On iOS, StoreKit sends
+      // current/restored transactions through purchaseStream; the explicit
+      // restore action below handles reinstalling on a different device.
+      if (Platform.isIOS) return;
+
       final androidAddition = _inAppPurchase
           .getPlatformAddition<InAppPurchaseAndroidPlatformAddition>();
       final response = await androidAddition.queryPastPurchases();
       if (response.error != null) return;
 
+      final currentProductId = productId;
       final hasActiveSubscription = response.pastPurchases.any(
         (purchase) =>
-            purchase.productID == productId &&
+            purchase.productID == currentProductId &&
             (purchase.status == PurchaseStatus.purchased ||
                 purchase.status == PurchaseStatus.restored),
       );
@@ -83,7 +96,8 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
     isLoading = true;
     notifyListeners();
 
-    if (!Platform.isAndroid) {
+    final currentProductId = productId;
+    if (currentProductId == null) {
       isLoading = false;
       messageKey = 'subscriptionAndroidOnly';
       notifyListeners();
@@ -97,7 +111,9 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
         return;
       }
 
-      final response = await _inAppPurchase.queryProductDetails({productId});
+      final response = await _inAppPurchase.queryProductDetails({
+        currentProductId,
+      });
       if (response.error != null || response.productDetails.isEmpty) {
         messageKey = 'subscriptionProductUnavailable';
         return;
@@ -139,7 +155,7 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> restorePurchases() async {
-    if (!Platform.isAndroid || isLoading) return;
+    if ((!Platform.isAndroid && !Platform.isIOS) || isLoading) return;
 
     isLoading = true;
     messageKey = 'subscriptionRestoring';
@@ -156,8 +172,9 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> _handlePurchaseUpdates(List<PurchaseDetails> purchases) async {
+    final currentProductId = productId;
     for (final purchase in purchases) {
-      if (purchase.productID != productId) continue;
+      if (purchase.productID != currentProductId) continue;
 
       switch (purchase.status) {
         case PurchaseStatus.pending:
@@ -195,7 +212,8 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (_purchaseFlowStarted &&
+    if (Platform.isAndroid &&
+        _purchaseFlowStarted &&
         (state == AppLifecycleState.inactive ||
             state == AppLifecycleState.paused ||
             state == AppLifecycleState.hidden)) {
@@ -203,7 +221,9 @@ class InAppPurchaseService extends ChangeNotifier with WidgetsBindingObserver {
       return;
     }
 
-    if (state == AppLifecycleState.resumed && _leftAppDuringPurchase) {
+    if (Platform.isAndroid &&
+        state == AppLifecycleState.resumed &&
+        _leftAppDuringPurchase) {
       Future<void>.delayed(const Duration(seconds: 2), () {
         if (_purchaseFlowStarted) {
           _finishPurchaseFlow('subscriptionPurchaseCanceled');

@@ -143,7 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionActive": MessageLookupByLibrary.simpleMessage(
             "Ad-free subscription is active"),
         "subscriptionAndroidOnly": MessageLookupByLibrary.simpleMessage(
-            "Subscriptions are currently available on Android only."),
+            "Subscriptions are not supported on this device."),
         "subscriptionBenefitNoAds":
             MessageLookupByLibrary.simpleMessage("Remove all ads"),
         "subscriptionBenefitUninterrupted":
@@ -160,7 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionPlanPreparing": MessageLookupByLibrary.simpleMessage(
             "Subscription plan coming soon"),
         "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
-            "The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester."),
+            "The subscription was not found. Confirm that it is available in the store and that the test account is eligible to purchase it."),
         "subscriptionPurchaseCanceled":
             MessageLookupByLibrary.simpleMessage("Purchase canceled."),
         "subscriptionPurchasePending": MessageLookupByLibrary.simpleMessage(
@@ -178,7 +178,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionRestoring":
             MessageLookupByLibrary.simpleMessage("Restoring purchases…"),
         "subscriptionStoreUnavailable": MessageLookupByLibrary.simpleMessage(
-            "Google Play is currently unavailable."),
+            "The store is currently unavailable."),
         "subscriptionTitle":
             MessageLookupByLibrary.simpleMessage("Ad-free subscription"),
         "success": MessageLookupByLibrary.simpleMessage("Success")

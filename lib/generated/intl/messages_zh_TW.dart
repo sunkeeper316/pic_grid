@@ -122,7 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "shapeStar": MessageLookupByLibrary.simpleMessage("星形"),
         "subscriptionActive": MessageLookupByLibrary.simpleMessage("去廣告訂閱已啟用"),
         "subscriptionAndroidOnly":
-            MessageLookupByLibrary.simpleMessage("目前僅支援 Android 訂閱。"),
+            MessageLookupByLibrary.simpleMessage("目前裝置不支援訂閱。"),
         "subscriptionBenefitNoAds":
             MessageLookupByLibrary.simpleMessage("移除所有廣告"),
         "subscriptionBenefitUninterrupted":
@@ -137,7 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionPlanPreparing":
             MessageLookupByLibrary.simpleMessage("訂閱方案準備中"),
         "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
-            "找不到訂閱方案，請確認已從內部測試連結安裝 App，且測試帳號已加入測試名單。"),
+            "找不到訂閱方案，請確認商品已在商店啟用，且測試帳號具備購買資格。"),
         "subscriptionPurchaseCanceled":
             MessageLookupByLibrary.simpleMessage("已取消購買。"),
         "subscriptionPurchasePending":
@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionRestoring":
             MessageLookupByLibrary.simpleMessage("正在恢復購買…"),
         "subscriptionStoreUnavailable":
-            MessageLookupByLibrary.simpleMessage("目前無法連線至 Google Play 商店。"),
+            MessageLookupByLibrary.simpleMessage("目前無法連線至商店。"),
         "subscriptionTitle": MessageLookupByLibrary.simpleMessage("去廣告訂閱"),
         "success": MessageLookupByLibrary.simpleMessage("成功")
       };

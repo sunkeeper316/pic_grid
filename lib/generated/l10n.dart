@@ -900,30 +900,30 @@ class S {
     );
   }
 
-  /// `Subscriptions are currently available on Android only.`
+  /// `Subscriptions are not supported on this device.`
   String get subscriptionAndroidOnly {
     return Intl.message(
-      'Subscriptions are currently available on Android only.',
+      'Subscriptions are not supported on this device.',
       name: 'subscriptionAndroidOnly',
       desc: '',
       args: [],
     );
   }
 
-  /// `Google Play is currently unavailable.`
+  /// `The store is currently unavailable.`
   String get subscriptionStoreUnavailable {
     return Intl.message(
-      'Google Play is currently unavailable.',
+      'The store is currently unavailable.',
       name: 'subscriptionStoreUnavailable',
       desc: '',
       args: [],
     );
   }
 
-  /// `The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester.`
+  /// `The subscription was not found. Confirm that it is available in the store and that the test account is eligible to purchase it.`
   String get subscriptionProductUnavailable {
     return Intl.message(
-      'The subscription plan was not found. Install the app through the internal testing link and confirm that your account is an approved tester.',
+      'The subscription was not found. Confirm that it is available in the store and that the test account is eligible to purchase it.',
       name: 'subscriptionProductUnavailable',
       desc: '',
       args: [],
