@@ -20,7 +20,7 @@ class _AdBannerState extends State<AdBanner> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!Platform.isAndroid) return;
+    if (!Platform.isAndroid && !Platform.isIOS) return;
 
     final width = MediaQuery.sizeOf(context).width.truncate();
     if (width > 0 && width != _lastWidth) {
@@ -39,7 +39,7 @@ class _AdBannerState extends State<AdBanner> {
     await _bannerAd?.dispose();
     if (mounted) setState(() => _bannerAd = null);
     final ad = BannerAd(
-      adUnitId: kReleaseMode ? AdIds.androidBanner : AdIds.androidTestBanner,
+      adUnitId: _adUnitId,
       request: const AdRequest(),
       size: size,
       listener: BannerAdListener(
@@ -68,7 +68,9 @@ class _AdBannerState extends State<AdBanner> {
   @override
   Widget build(BuildContext context) {
     final ad = _bannerAd;
-    if (!Platform.isAndroid || ad == null) return const SizedBox.shrink();
+    if ((!Platform.isAndroid && !Platform.isIOS) || ad == null) {
+      return const SizedBox.shrink();
+    }
 
     return ColoredBox(
       color: Colors.black,
@@ -81,5 +83,12 @@ class _AdBannerState extends State<AdBanner> {
         ),
       ),
     );
+  }
+
+  String get _adUnitId {
+    if (Platform.isIOS) {
+      return kReleaseMode ? AdIds.iosBanner : AdIds.iosTestBanner;
+    }
+    return kReleaseMode ? AdIds.androidBanner : AdIds.androidTestBanner;
   }
 }

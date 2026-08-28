@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AdVisibilityService.instance.initialize();
   InAppPurchaseService.instance.initialize();
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || Platform.isIOS) {
     await MobileAds.instance.initialize();
   }
   await SystemChrome.setPreferredOrientations([
