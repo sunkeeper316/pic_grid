@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pic_grid/generated/l10n.dart';
@@ -324,6 +325,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
           final borderWidth = controller.borderWidth.value;
           final borderColor = controller.borderColor.value;
           final isSaving = controller.isSaving.value;
+          final cropRevision = controller.cropRevision.value;
           final mainPhotoPosition = controller.mainPhotoPosition.value;
           final evenLayoutByColumns = controller.evenLayoutByColumns.value;
 
@@ -356,20 +358,19 @@ class GridCollageView extends GetView<GridCollageViewController> {
               ) {
                 children.add(
                   Positioned(
+                    key: ValueKey(
+                      '$cropRevision:${selectedImages[index].path}',
+                    ),
                     top: top,
                     left: left,
                     width: cellWidth,
                     height: cellHeight,
-                    child: Container(
-                      foregroundDecoration: BoxDecoration(
-                        border: borderWidth > 0
-                            ? Border.all(color: borderColor, width: borderWidth)
-                            : null,
-                      ),
-                      child: Image.file(
-                        File(selectedImages[index].path),
-                        fit: BoxFit.cover,
-                      ),
+                    child: _EditablePhotoCell(
+                      file: File(selectedImages[index].path),
+                      borderWidth: borderWidth,
+                      borderColor: borderColor,
+                      backgroundColor: Colors.white,
+                      gesturesEnabled: !isSaving,
                     ),
                   ),
                 );
@@ -526,17 +527,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                       left: left,
                       width: handleWidth,
                       height: 36,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                      child: _DraggableDividerHandle(
+                        axis: Axis.horizontal,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        onDrag: onDrag,
                         onDoubleTap: controller.toggleLayout,
-                        onVerticalDragUpdate: (details) =>
-                            onDrag(details.delta.dy),
-                        child: Center(
-                          child: DividerHandle(
-                            axis: Axis.horizontal,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
                       ),
                     ),
                   );
@@ -554,17 +549,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                       left: left - 18,
                       width: 36,
                       height: handleHeight,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                      child: _DraggableDividerHandle(
+                        axis: Axis.vertical,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        onDrag: onDrag,
                         onDoubleTap: controller.toggleLayout,
-                        onHorizontalDragUpdate: (details) =>
-                            onDrag(details.delta.dx),
-                        child: Center(
-                          child: DividerHandle(
-                            axis: Axis.vertical,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
                       ),
                     ),
                   );
@@ -755,6 +744,277 @@ class _LayoutOption extends StatelessWidget {
             const SizedBox(height: 8),
             Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EditablePhotoCell extends StatefulWidget {
+  const _EditablePhotoCell({
+    required this.file,
+    required this.borderWidth,
+    required this.borderColor,
+    required this.backgroundColor,
+    required this.gesturesEnabled,
+  });
+
+  final File file;
+  final double borderWidth;
+  final Color borderColor;
+  final Color backgroundColor;
+  final bool gesturesEnabled;
+
+  @override
+  State<_EditablePhotoCell> createState() => _EditablePhotoCellState();
+}
+
+class _EditablePhotoCellState extends State<_EditablePhotoCell> {
+  static const _minZoom = 0.2;
+  static const _maxZoom = 5.0;
+
+  ImageStream? _imageStream;
+  ImageStreamListener? _imageListener;
+  Size? _imageSize;
+  double _zoom = 1;
+  Offset _offset = Offset.zero;
+  double _startZoom = 1;
+  Offset _startOffset = Offset.zero;
+  Offset _startFocalPoint = Offset.zero;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _resolveImageSize();
+  }
+
+  @override
+  void didUpdateWidget(covariant _EditablePhotoCell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.file.path != widget.file.path) {
+      _zoom = 1;
+      _offset = Offset.zero;
+      _imageSize = null;
+      _resolveImageSize();
+    }
+  }
+
+  void _resolveImageSize() {
+    _removeImageListener();
+    final stream = FileImage(
+      widget.file,
+    ).resolve(createLocalImageConfiguration(context));
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener((info, _) {
+      if (!mounted) return;
+      setState(() {
+        _imageSize = Size(
+          info.image.width.toDouble(),
+          info.image.height.toDouble(),
+        );
+      });
+    });
+    _imageStream = stream;
+    _imageListener = listener;
+    stream.addListener(listener);
+  }
+
+  void _removeImageListener() {
+    final stream = _imageStream;
+    final listener = _imageListener;
+    if (stream != null && listener != null) {
+      stream.removeListener(listener);
+    }
+    _imageStream = null;
+    _imageListener = null;
+  }
+
+  Offset _clampOffset({
+    required Offset offset,
+    required Size viewport,
+    required Size image,
+    required double zoom,
+  }) {
+    final coverScale = math.max(
+      viewport.width / image.width,
+      viewport.height / image.height,
+    );
+    final displayedWidth = image.width * coverScale * zoom;
+    final displayedHeight = image.height * coverScale * zoom;
+    final maxX = (displayedWidth - viewport.width).abs() / 2;
+    final maxY = (displayedHeight - viewport.height).abs() / 2;
+    return Offset(offset.dx.clamp(-maxX, maxX), offset.dy.clamp(-maxY, maxY));
+  }
+
+  void _resetCrop() {
+    setState(() {
+      _zoom = 1;
+      _offset = Offset.zero;
+    });
+  }
+
+  @override
+  void dispose() {
+    _removeImageListener();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final viewport = Size(constraints.maxWidth, constraints.maxHeight);
+        final imageSize = _imageSize;
+        Widget image;
+
+        if (imageSize == null || viewport.isEmpty) {
+          image = Positioned.fill(
+            child: Image.file(widget.file, fit: BoxFit.cover),
+          );
+        } else {
+          final coverScale = math.max(
+            viewport.width / imageSize.width,
+            viewport.height / imageSize.height,
+          );
+          final displayedWidth = imageSize.width * coverScale * _zoom;
+          final displayedHeight = imageSize.height * coverScale * _zoom;
+          final offset = _clampOffset(
+            offset: _offset,
+            viewport: viewport,
+            image: imageSize,
+            zoom: _zoom,
+          );
+          image = Positioned(
+            left: (viewport.width - displayedWidth) / 2 + offset.dx,
+            top: (viewport.height - displayedHeight) / 2 + offset.dy,
+            width: displayedWidth,
+            height: displayedHeight,
+            child: Image.file(widget.file, fit: BoxFit.fill),
+          );
+        }
+
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onDoubleTap: widget.gesturesEnabled ? _resetCrop : null,
+          onScaleStart: widget.gesturesEnabled && imageSize != null
+              ? (details) {
+                  _startZoom = _zoom;
+                  _startOffset = _clampOffset(
+                    offset: _offset,
+                    viewport: viewport,
+                    image: imageSize,
+                    zoom: _zoom,
+                  );
+                  _startFocalPoint = details.localFocalPoint;
+                }
+              : null,
+          onScaleUpdate: widget.gesturesEnabled && imageSize != null
+              ? (details) {
+                  final zoom = (_startZoom * details.scale).clamp(
+                    _minZoom,
+                    _maxZoom,
+                  );
+                  final viewportCenter = Offset(
+                    viewport.width / 2,
+                    viewport.height / 2,
+                  );
+                  final contentPoint =
+                      (_startFocalPoint - viewportCenter - _startOffset) /
+                      _startZoom;
+                  final offset =
+                      details.localFocalPoint -
+                      viewportCenter -
+                      contentPoint * zoom;
+                  setState(() {
+                    _zoom = zoom;
+                    _offset = _clampOffset(
+                      offset: offset,
+                      viewport: viewport,
+                      image: imageSize,
+                      zoom: zoom,
+                    );
+                  });
+                }
+              : null,
+          child: ClipRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ColoredBox(color: widget.backgroundColor),
+                image,
+                if (widget.borderWidth > 0)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: widget.borderColor,
+                            width: widget.borderWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DraggableDividerHandle extends StatefulWidget {
+  const _DraggableDividerHandle({
+    required this.axis,
+    required this.color,
+    required this.onDrag,
+    required this.onDoubleTap,
+  });
+
+  final Axis axis;
+  final Color color;
+  final ValueChanged<double> onDrag;
+  final VoidCallback onDoubleTap;
+
+  @override
+  State<_DraggableDividerHandle> createState() =>
+      _DraggableDividerHandleState();
+}
+
+class _DraggableDividerHandleState extends State<_DraggableDividerHandle> {
+  bool _showGuide = false;
+
+  void _setGuideVisible(bool visible) {
+    if (_showGuide != visible) {
+      setState(() => _showGuide = visible);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final horizontal = widget.axis == Axis.horizontal;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onDoubleTap: widget.onDoubleTap,
+      onVerticalDragStart: horizontal ? (_) => _setGuideVisible(true) : null,
+      onVerticalDragUpdate: horizontal
+          ? (details) => widget.onDrag(details.delta.dy)
+          : null,
+      onVerticalDragEnd: horizontal ? (_) => _setGuideVisible(false) : null,
+      onVerticalDragCancel: horizontal ? () => _setGuideVisible(false) : null,
+      onHorizontalDragStart: horizontal ? null : (_) => _setGuideVisible(true),
+      onHorizontalDragUpdate: horizontal
+          ? null
+          : (details) => widget.onDrag(details.delta.dx),
+      onHorizontalDragEnd: horizontal ? null : (_) => _setGuideVisible(false),
+      onHorizontalDragCancel: horizontal ? null : () => _setGuideVisible(false),
+      child: Center(
+        child: DividerHandle(
+          axis: widget.axis,
+          color: widget.color,
+          showGuide: _showGuide,
         ),
       ),
     );

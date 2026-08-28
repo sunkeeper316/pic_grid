@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pic_grid/sharedpreference/sharedpreferences.dart';
+import 'package:pic_grid/services/ad_visibility_service.dart';
 
 class SettingViewController extends GetxController {
   final RxString appVersion = ''.obs;
@@ -9,25 +9,26 @@ class SettingViewController extends GetxController {
   final RxBool isAdRemoved = false.obs;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
-    _loadSettings();
+    await _loadAppVersion();
+    isAdRemoved.value = AdVisibilityService.instance.isSubscribed;
   }
 
-  Future<void> _loadSettings() async {
-    final results = await Future.wait<Object>([
-      PackageInfo.fromPlatform(),
-      SharedPreference.loadAdRemoved(),
-    ]);
-
-    final packageInfo = results[0] as PackageInfo;
-    appVersion.value = packageInfo.version;
-    isAdRemoved.value = results[1] as bool;
+  Future<void> _loadAppVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      appVersion.value = packageInfo.buildNumber.isEmpty
+          ? packageInfo.version
+          : '${packageInfo.version} (${packageInfo.buildNumber})';
+    } catch (_) {
+      appVersion.value = '-';
+    }
   }
 
   /// 在 IAP 購買或恢復購買驗證完成後更新本地權限快取。
   Future<void> updateAdRemovedStatus(bool isRemoved) async {
-    await SharedPreference.saveAdRemoved(isRemoved);
+    await AdVisibilityService.instance.setSubscribed(isRemoved);
     isAdRemoved.value = isRemoved;
   }
 }
