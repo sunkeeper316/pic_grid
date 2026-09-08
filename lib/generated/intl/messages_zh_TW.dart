@@ -145,7 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionPurchaseSuccess":
             MessageLookupByLibrary.simpleMessage("訂閱成功，廣告已移除。"),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
-            "價格與訂閱週期將以商店顯示資訊為準。自動續訂方案可隨時至商店帳號設定取消。"),
+            "訂閱期間為 1 個月。價格與訂閱週期將以商店顯示資訊為準。自動續訂方案可隨時至商店帳號設定取消。"),
         "subscriptionRestore": MessageLookupByLibrary.simpleMessage("恢復購買"),
         "subscriptionRestoreFailed":
             MessageLookupByLibrary.simpleMessage("無法恢復購買，請稍後再試。"),

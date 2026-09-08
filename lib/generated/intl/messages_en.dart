@@ -168,7 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscriptionPurchaseSuccess": MessageLookupByLibrary.simpleMessage(
             "Subscription successful. Ads have been removed."),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
-            "The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings."),
+            "The subscription period is 1 month. The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings."),
         "subscriptionRestore":
             MessageLookupByLibrary.simpleMessage("Restore purchases"),
         "subscriptionRestoreFailed": MessageLookupByLibrary.simpleMessage(
