@@ -300,484 +300,487 @@ class GridCollageView extends GetView<GridCollageViewController> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          _confirmLeave(context);
-        }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final verticalToolbar = constraints.maxWidth > constraints.maxHeight;
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (!didPop) {
+              _confirmLeave(context);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(title: Text(S.current.editorTitle)),
+            bottomNavigationBar: verticalToolbar
+                ? null
+                : _buildToolbar(context, vertical: false),
+            body: verticalToolbar
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: _buildCanvas(context)),
+                      _buildToolbar(context, vertical: true),
+                    ],
+                  )
+                : _buildCanvas(context),
+          ),
+        );
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text(S.current.editorTitle)),
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: Border(
-                top: BorderSide(color: Theme.of(context).dividerColor),
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.add_photo_alternate_outlined),
-                  tooltip: S.of(context).homePickPhoto,
-                  onPressed: () => _confirmPickImages(context),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.aspect_ratio),
-                  tooltip: S.of(context).canvasAspectRatio,
-                  onPressed: () => _showCanvasSettings(context),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.border_style_outlined),
-                  tooltip: S.of(context).editorBorderSettingsTooltip,
-                  onPressed: () => _showBorderSettings(context),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.dashboard_customize_outlined),
-                  tooltip: S.of(context).editorLayoutSettingsTooltip,
-                  onPressed: () => _showLayoutSettings(context),
-                ),
-                Obx(
-                  () => IconButton(
-                    icon: controller.isSaving.value
-                        ? const SizedBox.square(
-                            dimension: 22,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.save_alt_outlined),
-                    tooltip: S.of(context).editorSaveToAlbumTooltip,
-                    onPressed: controller.isSaving.value
-                        ? null
-                        : controller.saveImage,
-                  ),
-                ),
-              ],
-            ),
+    );
+  }
+
+  Widget _buildToolbar(BuildContext context, {required bool vertical}) {
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: Border(
+            top: vertical
+                ? BorderSide.none
+                : BorderSide(color: Theme.of(context).dividerColor),
+            left: vertical
+                ? BorderSide(color: Theme.of(context).dividerColor)
+                : BorderSide.none,
           ),
         ),
-        body: Obx(() {
-          if (controller.selectedImages.isEmpty) {
-            return Center(
-              child: Text(S.of(context).editorPhotoSelectionRequired),
+        padding: EdgeInsets.symmetric(
+          vertical: vertical ? 0 : 6,
+          horizontal: vertical ? 6 : 0,
+        ),
+        child: Flex(
+          direction: vertical ? Axis.vertical : Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.add_photo_alternate_outlined),
+              tooltip: S.of(context).homePickPhoto,
+              onPressed: () => _confirmPickImages(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.aspect_ratio),
+              tooltip: S.of(context).canvasAspectRatio,
+              onPressed: () => _showCanvasSettings(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.border_style_outlined),
+              tooltip: S.of(context).editorBorderSettingsTooltip,
+              onPressed: () => _showBorderSettings(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.dashboard_customize_outlined),
+              tooltip: S.of(context).editorLayoutSettingsTooltip,
+              onPressed: () => _showLayoutSettings(context),
+            ),
+            Obx(
+              () => IconButton(
+                icon: controller.isSaving.value
+                    ? const SizedBox.square(
+                        dimension: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.save_alt_outlined),
+                tooltip: S.of(context).editorSaveToAlbumTooltip,
+                onPressed: controller.isSaving.value
+                    ? null
+                    : controller.saveImage,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCanvas(BuildContext context) {
+    return Obx(() {
+      if (controller.selectedImages.isEmpty) {
+        return Center(child: Text(S.of(context).editorPhotoSelectionRequired));
+      }
+
+      // Read these values here so Obx refreshes the preview immediately.
+      final selectedImages = controller.selectedImages.toList();
+      final rowProportions = controller.rowProportions.toList();
+      final colProportions = controller.colProportions.toList();
+      final localProportions = controller.localProportions
+          .map((track) => List<double>.of(track))
+          .toList();
+      final aspectRatio = controller.canvasAspectRatio.value.value;
+      final borderWidth = controller.borderWidth.value;
+      final borderColor = controller.borderColor.value;
+      final isSaving = controller.isSaving.value;
+      final cropRevision = controller.cropRevision.value;
+      final mainPhotoPosition = controller.mainPhotoPosition.value;
+      final evenLayoutByColumns = controller.evenLayoutByColumns.value;
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final double width = math.min(
+            constraints.maxWidth,
+            constraints.maxHeight * aspectRatio,
+          );
+          final double height = width / aspectRatio;
+
+          int rows = rowProportions.length;
+          int cols = colProportions.length;
+          final hasMainPhoto =
+              selectedImages.length.isOdd && selectedImages.length != 9;
+          final mainPhotoAtLeft =
+              hasMainPhoto && mainPhotoPosition == MainPhotoPosition.left;
+          final mainPhotoAtRight =
+              hasMainPhoto && mainPhotoPosition == MainPhotoPosition.right;
+          final mainPhotoAtTop =
+              hasMainPhoto && mainPhotoPosition == MainPhotoPosition.top;
+          final mainPhotoAtBottom =
+              hasMainPhoto && mainPhotoPosition == MainPhotoPosition.bottom;
+
+          List<Widget> children = [];
+
+          void addPhotoRect(
+            int index,
+            double left,
+            double top,
+            double cellWidth,
+            double cellHeight,
+          ) {
+            children.add(
+              Positioned(
+                key: ValueKey('$cropRevision:${selectedImages[index].path}'),
+                top: top,
+                left: left,
+                width: cellWidth,
+                height: cellHeight,
+                child: _EditablePhotoCell(
+                  file: File(selectedImages[index].path),
+                  // Each photo contributes half of an internal seam.
+                  // Canvas edges keep the full selected border width.
+                  border: Border(
+                    left: BorderSide(
+                      color: borderColor,
+                      width: left.abs() < 0.001 ? borderWidth : borderWidth / 2,
+                    ),
+                    top: BorderSide(
+                      color: borderColor,
+                      width: top.abs() < 0.001 ? borderWidth : borderWidth / 2,
+                    ),
+                    right: BorderSide(
+                      color: borderColor,
+                      width: (left + cellWidth - width).abs() < 0.001
+                          ? borderWidth
+                          : borderWidth / 2,
+                    ),
+                    bottom: BorderSide(
+                      color: borderColor,
+                      width: (top + cellHeight - height).abs() < 0.001
+                          ? borderWidth
+                          : borderWidth / 2,
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  gesturesEnabled: !isSaving,
+                ),
+              ),
             );
           }
 
-          // Read these values here so Obx refreshes the preview immediately.
-          final selectedImages = controller.selectedImages.toList();
-          final rowProportions = controller.rowProportions.toList();
-          final colProportions = controller.colProportions.toList();
-          final localProportions = controller.localProportions
-              .map((track) => List<double>.of(track))
-              .toList();
-          final aspectRatio = controller.canvasAspectRatio.value.value;
-          final borderWidth = controller.borderWidth.value;
-          final borderColor = controller.borderColor.value;
-          final isSaving = controller.isSaving.value;
-          final cropRevision = controller.cropRevision.value;
-          final mainPhotoPosition = controller.mainPhotoPosition.value;
-          final evenLayoutByColumns = controller.evenLayoutByColumns.value;
+          if (mainPhotoAtLeft || mainPhotoAtRight) {
+            final mainColumn = mainPhotoAtLeft ? 0 : cols - 1;
+            final mainLeft =
+                colProportions
+                    .take(mainColumn)
+                    .fold<double>(0, (sum, value) => sum + value) *
+                width;
+            addPhotoRect(
+              0,
+              mainLeft,
+              0,
+              colProportions[mainColumn] * width,
+              height,
+            );
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final double width = math.min(
-                constraints.maxWidth,
-                constraints.maxHeight * aspectRatio,
-              );
-              final double height = width / aspectRatio;
-
-              int rows = rowProportions.length;
-              int cols = colProportions.length;
-              final hasMainPhoto =
-                  selectedImages.length.isOdd && selectedImages.length != 9;
-              final mainPhotoAtLeft =
-                  hasMainPhoto && mainPhotoPosition == MainPhotoPosition.left;
-              final mainPhotoAtRight =
-                  hasMainPhoto && mainPhotoPosition == MainPhotoPosition.right;
-              final mainPhotoAtTop =
-                  hasMainPhoto && mainPhotoPosition == MainPhotoPosition.top;
-              final mainPhotoAtBottom =
-                  hasMainPhoto && mainPhotoPosition == MainPhotoPosition.bottom;
-
-              List<Widget> children = [];
-
-              void addPhotoRect(
-                int index,
-                double left,
-                double top,
-                double cellWidth,
-                double cellHeight,
+            int imageIndex = 1;
+            for (int track = 0; track < localProportions.length; track++) {
+              final column = (mainPhotoAtLeft ? 1 : 0) + track;
+              final trackLeft =
+                  colProportions
+                      .take(column)
+                      .fold<double>(0, (sum, value) => sum + value) *
+                  width;
+              final trackWidth = colProportions[column] * width;
+              double top = 0;
+              for (
+                int segment = 0;
+                segment < localProportions[track].length;
+                segment++
               ) {
-                children.add(
-                  Positioned(
-                    key: ValueKey(
-                      '$cropRevision:${selectedImages[index].path}',
-                    ),
-                    top: top,
-                    left: left,
-                    width: cellWidth,
-                    height: cellHeight,
-                    child: _EditablePhotoCell(
-                      file: File(selectedImages[index].path),
-                      // Each photo contributes half of an internal seam.
-                      // Canvas edges keep the full selected border width.
-                      border: Border(
-                        left: BorderSide(
-                          color: borderColor,
-                          width: left.abs() < 0.001
-                              ? borderWidth
-                              : borderWidth / 2,
-                        ),
-                        top: BorderSide(
-                          color: borderColor,
-                          width: top.abs() < 0.001
-                              ? borderWidth
-                              : borderWidth / 2,
-                        ),
-                        right: BorderSide(
-                          color: borderColor,
-                          width: (left + cellWidth - width).abs() < 0.001
-                              ? borderWidth
-                              : borderWidth / 2,
-                        ),
-                        bottom: BorderSide(
-                          color: borderColor,
-                          width: (top + cellHeight - height).abs() < 0.001
-                              ? borderWidth
-                              : borderWidth / 2,
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                      gesturesEnabled: !isSaving,
-                    ),
-                  ),
+                final cellHeight = localProportions[track][segment] * height;
+                addPhotoRect(
+                  imageIndex++,
+                  trackLeft,
+                  top,
+                  trackWidth,
+                  cellHeight,
                 );
+                top += cellHeight;
               }
+            }
+          } else if (mainPhotoAtTop || mainPhotoAtBottom) {
+            final mainRow = mainPhotoAtTop ? 0 : rows - 1;
+            final mainTop =
+                rowProportions
+                    .take(mainRow)
+                    .fold<double>(0, (sum, value) => sum + value) *
+                height;
+            addPhotoRect(
+              0,
+              0,
+              mainTop,
+              width,
+              rowProportions[mainRow] * height,
+            );
 
-              if (mainPhotoAtLeft || mainPhotoAtRight) {
-                final mainColumn = mainPhotoAtLeft ? 0 : cols - 1;
-                final mainLeft =
+            int imageIndex = 1;
+            for (int track = 0; track < localProportions.length; track++) {
+              final row = (mainPhotoAtTop ? 1 : 0) + track;
+              final trackTop =
+                  rowProportions
+                      .take(row)
+                      .fold<double>(0, (sum, value) => sum + value) *
+                  height;
+              final trackHeight = rowProportions[row] * height;
+              double left = 0;
+              for (
+                int segment = 0;
+                segment < localProportions[track].length;
+                segment++
+              ) {
+                final cellWidth = localProportions[track][segment] * width;
+                addPhotoRect(
+                  imageIndex++,
+                  left,
+                  trackTop,
+                  cellWidth,
+                  trackHeight,
+                );
+                left += cellWidth;
+              }
+            }
+          } else {
+            int imageIndex = 0;
+            if (evenLayoutByColumns) {
+              for (int track = 0; track < localProportions.length; track++) {
+                final trackLeft =
                     colProportions
-                        .take(mainColumn)
+                        .take(track)
                         .fold<double>(0, (sum, value) => sum + value) *
                     width;
-                addPhotoRect(
-                  0,
-                  mainLeft,
-                  0,
-                  colProportions[mainColumn] * width,
-                  height,
-                );
-
-                int imageIndex = 1;
-                for (int track = 0; track < localProportions.length; track++) {
-                  final column = (mainPhotoAtLeft ? 1 : 0) + track;
-                  final trackLeft =
-                      colProportions
-                          .take(column)
-                          .fold<double>(0, (sum, value) => sum + value) *
-                      width;
-                  final trackWidth = colProportions[column] * width;
-                  double top = 0;
-                  for (
-                    int segment = 0;
-                    segment < localProportions[track].length;
-                    segment++
-                  ) {
-                    final cellHeight =
-                        localProportions[track][segment] * height;
-                    addPhotoRect(
-                      imageIndex++,
-                      trackLeft,
-                      top,
-                      trackWidth,
-                      cellHeight,
-                    );
-                    top += cellHeight;
-                  }
+                final trackWidth = colProportions[track] * width;
+                double top = 0;
+                for (final proportion in localProportions[track]) {
+                  final cellHeight = proportion * height;
+                  addPhotoRect(
+                    imageIndex++,
+                    trackLeft,
+                    top,
+                    trackWidth,
+                    cellHeight,
+                  );
+                  top += cellHeight;
                 }
-              } else if (mainPhotoAtTop || mainPhotoAtBottom) {
-                final mainRow = mainPhotoAtTop ? 0 : rows - 1;
-                final mainTop =
+              }
+            } else {
+              for (int track = 0; track < localProportions.length; track++) {
+                final trackTop =
                     rowProportions
-                        .take(mainRow)
+                        .take(track)
                         .fold<double>(0, (sum, value) => sum + value) *
                     height;
-                addPhotoRect(
-                  0,
-                  0,
-                  mainTop,
-                  width,
-                  rowProportions[mainRow] * height,
-                );
-
-                int imageIndex = 1;
-                for (int track = 0; track < localProportions.length; track++) {
-                  final row = (mainPhotoAtTop ? 1 : 0) + track;
-                  final trackTop =
-                      rowProportions
-                          .take(row)
-                          .fold<double>(0, (sum, value) => sum + value) *
-                      height;
-                  final trackHeight = rowProportions[row] * height;
-                  double left = 0;
-                  for (
-                    int segment = 0;
-                    segment < localProportions[track].length;
-                    segment++
-                  ) {
-                    final cellWidth = localProportions[track][segment] * width;
-                    addPhotoRect(
-                      imageIndex++,
-                      left,
-                      trackTop,
-                      cellWidth,
-                      trackHeight,
-                    );
-                    left += cellWidth;
-                  }
-                }
-              } else {
-                int imageIndex = 0;
-                if (evenLayoutByColumns) {
-                  for (
-                    int track = 0;
-                    track < localProportions.length;
-                    track++
-                  ) {
-                    final trackLeft =
-                        colProportions
-                            .take(track)
-                            .fold<double>(0, (sum, value) => sum + value) *
-                        width;
-                    final trackWidth = colProportions[track] * width;
-                    double top = 0;
-                    for (final proportion in localProportions[track]) {
-                      final cellHeight = proportion * height;
-                      addPhotoRect(
-                        imageIndex++,
-                        trackLeft,
-                        top,
-                        trackWidth,
-                        cellHeight,
-                      );
-                      top += cellHeight;
-                    }
-                  }
-                } else {
-                  for (
-                    int track = 0;
-                    track < localProportions.length;
-                    track++
-                  ) {
-                    final trackTop =
-                        rowProportions
-                            .take(track)
-                            .fold<double>(0, (sum, value) => sum + value) *
-                        height;
-                    final trackHeight = rowProportions[track] * height;
-                    double left = 0;
-                    for (final proportion in localProportions[track]) {
-                      final cellWidth = proportion * width;
-                      addPhotoRect(
-                        imageIndex++,
-                        left,
-                        trackTop,
-                        cellWidth,
-                        trackHeight,
-                      );
-                      left += cellWidth;
-                    }
-                  }
+                final trackHeight = rowProportions[track] * height;
+                double left = 0;
+                for (final proportion in localProportions[track]) {
+                  final cellWidth = proportion * width;
+                  addPhotoRect(
+                    imageIndex++,
+                    left,
+                    trackTop,
+                    cellWidth,
+                    trackHeight,
+                  );
+                  left += cellWidth;
                 }
               }
+            }
+          }
 
-              if (!isSaving) {
-                void addHorizontalHandle({
-                  required double top,
-                  required double left,
-                  required double handleWidth,
-                  required ValueChanged<double> onDrag,
-                }) {
-                  children.add(
-                    Positioned(
-                      top: top - 18,
-                      left: left,
-                      width: handleWidth,
-                      height: 36,
-                      child: _DraggableDividerHandle(
-                        axis: Axis.horizontal,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        onDrag: onDrag,
-                        onDoubleTap: controller.toggleLayout,
-                      ),
-                    ),
-                  );
-                }
-
-                void addVerticalHandle({
-                  required double left,
-                  required double top,
-                  required double handleHeight,
-                  required ValueChanged<double> onDrag,
-                }) {
-                  children.add(
-                    Positioned(
-                      top: top,
-                      left: left - 18,
-                      width: 36,
-                      height: handleHeight,
-                      child: _DraggableDividerHandle(
-                        axis: Axis.vertical,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        onDrag: onDrag,
-                        onDoubleTap: controller.toggleLayout,
-                      ),
-                    ),
-                  );
-                }
-
-                void addGlobalHorizontalHandles() {
-                  double top = 0;
-                  for (int row = 0; row < rows - 1; row++) {
-                    top += rowProportions[row] * height;
-                    final rowIndex = row;
-                    addHorizontalHandle(
-                      top: top,
-                      left: 0,
-                      handleWidth: width,
-                      onDrag: (delta) => controller.updateRowProportion(
-                        rowIndex,
-                        delta / height,
-                      ),
-                    );
-                  }
-                }
-
-                void addGlobalVerticalHandles() {
-                  double left = 0;
-                  for (int col = 0; col < cols - 1; col++) {
-                    left += colProportions[col] * width;
-                    final colIndex = col;
-                    addVerticalHandle(
-                      left: left,
-                      top: 0,
-                      handleHeight: height,
-                      onDrag: (delta) => controller.updateColProportion(
-                        colIndex,
-                        delta / width,
-                      ),
-                    );
-                  }
-                }
-
-                void addLocalHorizontalHandles(int columnOffset) {
-                  for (
-                    int track = 0;
-                    track < localProportions.length;
-                    track++
-                  ) {
-                    final column = columnOffset + track;
-                    final trackLeft =
-                        colProportions
-                            .take(column)
-                            .fold<double>(0, (sum, value) => sum + value) *
-                        width;
-                    final trackWidth = colProportions[column] * width;
-                    double top = 0;
-                    for (
-                      int segment = 0;
-                      segment < localProportions[track].length - 1;
-                      segment++
-                    ) {
-                      top += localProportions[track][segment] * height;
-                      final trackIndex = track;
-                      final segmentIndex = segment;
-                      addHorizontalHandle(
-                        top: top,
-                        left: trackLeft,
-                        handleWidth: trackWidth,
-                        onDrag: (delta) => controller.updateLocalProportion(
-                          trackIndex,
-                          segmentIndex,
-                          delta / height,
-                        ),
-                      );
-                    }
-                  }
-                }
-
-                void addLocalVerticalHandles(int rowOffset) {
-                  for (
-                    int track = 0;
-                    track < localProportions.length;
-                    track++
-                  ) {
-                    final row = rowOffset + track;
-                    final trackTop =
-                        rowProportions
-                            .take(row)
-                            .fold<double>(0, (sum, value) => sum + value) *
-                        height;
-                    final trackHeight = rowProportions[row] * height;
-                    double left = 0;
-                    for (
-                      int segment = 0;
-                      segment < localProportions[track].length - 1;
-                      segment++
-                    ) {
-                      left += localProportions[track][segment] * width;
-                      final trackIndex = track;
-                      final segmentIndex = segment;
-                      addVerticalHandle(
-                        left: left,
-                        top: trackTop,
-                        handleHeight: trackHeight,
-                        onDrag: (delta) => controller.updateLocalProportion(
-                          trackIndex,
-                          segmentIndex,
-                          delta / width,
-                        ),
-                      );
-                    }
-                  }
-                }
-
-                if (mainPhotoAtLeft || mainPhotoAtRight) {
-                  addGlobalVerticalHandles();
-                  addLocalHorizontalHandles(mainPhotoAtLeft ? 1 : 0);
-                } else if (mainPhotoAtTop || mainPhotoAtBottom) {
-                  addGlobalHorizontalHandles();
-                  addLocalVerticalHandles(mainPhotoAtTop ? 1 : 0);
-                } else {
-                  if (evenLayoutByColumns) {
-                    addGlobalVerticalHandles();
-                    addLocalHorizontalHandles(0);
-                  } else {
-                    addGlobalHorizontalHandles();
-                    addLocalVerticalHandles(0);
-                  }
-                }
-              }
-
-              return Center(
-                child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: RepaintBoundary(
-                    key: controller.repaintKey,
-                    child: Stack(children: children),
+          if (!isSaving) {
+            void addHorizontalHandle({
+              required double top,
+              required double left,
+              required double handleWidth,
+              required ValueChanged<double> onDrag,
+            }) {
+              children.add(
+                Positioned(
+                  top: top - 18,
+                  left: left,
+                  width: handleWidth,
+                  height: 36,
+                  child: _DraggableDividerHandle(
+                    axis: Axis.horizontal,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    onDrag: onDrag,
+                    onDoubleTap: controller.toggleLayout,
                   ),
                 ),
               );
-            },
+            }
+
+            void addVerticalHandle({
+              required double left,
+              required double top,
+              required double handleHeight,
+              required ValueChanged<double> onDrag,
+            }) {
+              children.add(
+                Positioned(
+                  top: top,
+                  left: left - 18,
+                  width: 36,
+                  height: handleHeight,
+                  child: _DraggableDividerHandle(
+                    axis: Axis.vertical,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    onDrag: onDrag,
+                    onDoubleTap: controller.toggleLayout,
+                  ),
+                ),
+              );
+            }
+
+            void addGlobalHorizontalHandles() {
+              double top = 0;
+              for (int row = 0; row < rows - 1; row++) {
+                top += rowProportions[row] * height;
+                final rowIndex = row;
+                addHorizontalHandle(
+                  top: top,
+                  left: 0,
+                  handleWidth: width,
+                  onDrag: (delta) =>
+                      controller.updateRowProportion(rowIndex, delta / height),
+                );
+              }
+            }
+
+            void addGlobalVerticalHandles() {
+              double left = 0;
+              for (int col = 0; col < cols - 1; col++) {
+                left += colProportions[col] * width;
+                final colIndex = col;
+                addVerticalHandle(
+                  left: left,
+                  top: 0,
+                  handleHeight: height,
+                  onDrag: (delta) =>
+                      controller.updateColProportion(colIndex, delta / width),
+                );
+              }
+            }
+
+            void addLocalHorizontalHandles(int columnOffset) {
+              for (int track = 0; track < localProportions.length; track++) {
+                final column = columnOffset + track;
+                final trackLeft =
+                    colProportions
+                        .take(column)
+                        .fold<double>(0, (sum, value) => sum + value) *
+                    width;
+                final trackWidth = colProportions[column] * width;
+                double top = 0;
+                for (
+                  int segment = 0;
+                  segment < localProportions[track].length - 1;
+                  segment++
+                ) {
+                  top += localProportions[track][segment] * height;
+                  final trackIndex = track;
+                  final segmentIndex = segment;
+                  addHorizontalHandle(
+                    top: top,
+                    left: trackLeft,
+                    handleWidth: trackWidth,
+                    onDrag: (delta) => controller.updateLocalProportion(
+                      trackIndex,
+                      segmentIndex,
+                      delta / height,
+                    ),
+                  );
+                }
+              }
+            }
+
+            void addLocalVerticalHandles(int rowOffset) {
+              for (int track = 0; track < localProportions.length; track++) {
+                final row = rowOffset + track;
+                final trackTop =
+                    rowProportions
+                        .take(row)
+                        .fold<double>(0, (sum, value) => sum + value) *
+                    height;
+                final trackHeight = rowProportions[row] * height;
+                double left = 0;
+                for (
+                  int segment = 0;
+                  segment < localProportions[track].length - 1;
+                  segment++
+                ) {
+                  left += localProportions[track][segment] * width;
+                  final trackIndex = track;
+                  final segmentIndex = segment;
+                  addVerticalHandle(
+                    left: left,
+                    top: trackTop,
+                    handleHeight: trackHeight,
+                    onDrag: (delta) => controller.updateLocalProportion(
+                      trackIndex,
+                      segmentIndex,
+                      delta / width,
+                    ),
+                  );
+                }
+              }
+            }
+
+            if (mainPhotoAtLeft || mainPhotoAtRight) {
+              addGlobalVerticalHandles();
+              addLocalHorizontalHandles(mainPhotoAtLeft ? 1 : 0);
+            } else if (mainPhotoAtTop || mainPhotoAtBottom) {
+              addGlobalHorizontalHandles();
+              addLocalVerticalHandles(mainPhotoAtTop ? 1 : 0);
+            } else {
+              if (evenLayoutByColumns) {
+                addGlobalVerticalHandles();
+                addLocalHorizontalHandles(0);
+              } else {
+                addGlobalHorizontalHandles();
+                addLocalVerticalHandles(0);
+              }
+            }
+          }
+
+          return Center(
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: RepaintBoundary(
+                key: controller.repaintKey,
+                child: Stack(children: children),
+              ),
+            ),
           );
-        }),
-      ),
-    );
+        },
+      );
+    });
   }
 }
 
