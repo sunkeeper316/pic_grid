@@ -92,7 +92,7 @@ class SubscriptionView extends GetView<SubscriptionViewController> {
                           controller.product.value != null) ...[
                         const SizedBox(height: 8),
                         Text(
-                          '${controller.product.value!.price} / 月',
+                          '${controller.product.value!.price} ${strings.subscriptionPerMonth}',
                           style: const TextStyle(
                             color: Colors.amber,
                             fontSize: 24,

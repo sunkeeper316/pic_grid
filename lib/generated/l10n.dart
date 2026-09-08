@@ -890,6 +890,16 @@ class S {
     );
   }
 
+  /// `/ month`
+  String get subscriptionPerMonth {
+    return Intl.message(
+      '/ month',
+      name: 'subscriptionPerMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The subscription period is 1 month. The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings.`
   String get subscriptionRenewalNotice {
     return Intl.message(

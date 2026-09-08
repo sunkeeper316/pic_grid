@@ -98,6 +98,7 @@
   "subscriptionActive": "Ad-free subscription is active",
   "subscriptionButton": "Subscribe now",
   "subscriptionRestore": "Restore purchases",
+  "subscriptionPerMonth": "/ month",
   "subscriptionRenewalNotice": "The subscription period is 1 month. The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings.",
   "subscriptionAndroidOnly": "Subscriptions are not supported on this device.",
   "subscriptionStoreUnavailable": "The store is currently unavailable.",

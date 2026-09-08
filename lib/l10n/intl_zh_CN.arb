@@ -98,6 +98,7 @@
   "subscriptionActive": "去广告订阅已启用",
   "subscriptionButton": "立即订阅",
   "subscriptionRestore": "恢复购买",
+  "subscriptionPerMonth": "/ 月",
   "subscriptionRenewalNotice": "订阅期间为 1 个月。价格与订阅周期将以商店显示信息为准。自动续订方案可随时至商店账号设置取消。",
   "subscriptionAndroidOnly": "目前设备不支持订阅。",
   "subscriptionStoreUnavailable": "目前无法连接至商店。",
