@@ -1039,6 +1039,16 @@ class S {
       args: [index],
     );
   }
+
+  /// `Canvas aspect ratio`
+  String get canvasAspectRatio {
+    return Intl.message(
+      'Canvas aspect ratio',
+      name: 'canvasAspectRatio',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

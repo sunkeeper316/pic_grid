@@ -118,5 +118,6 @@
     "placeholders": {
       "index": { "type": "int" }
     }
-  }
+  },
+  "canvasAspectRatio": "画布比例"
 }

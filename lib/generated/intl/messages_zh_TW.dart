@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "borderSettings": MessageLookupByLibrary.simpleMessage("框線"),
         "borderThickness": MessageLookupByLibrary.simpleMessage("粗細"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "canvasAspectRatio": MessageLookupByLibrary.simpleMessage("畫布比例"),
         "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("取消"),
         "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("完成"),
         "clipLoadingImage": MessageLookupByLibrary.simpleMessage("載入圖片中..."),
@@ -134,6 +135,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("訂閱後移除所有廣告"),
         "subscriptionHeadline":
             MessageLookupByLibrary.simpleMessage("享受無廣告的 PicGrid"),
+        "subscriptionPerMonth": MessageLookupByLibrary.simpleMessage("/ 月"),
         "subscriptionPlanPreparing":
             MessageLookupByLibrary.simpleMessage("訂閱方案準備中"),
         "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
@@ -144,7 +146,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("交易正在處理中…"),
         "subscriptionPurchaseSuccess":
             MessageLookupByLibrary.simpleMessage("訂閱成功，廣告已移除。"),
-        "subscriptionPerMonth": MessageLookupByLibrary.simpleMessage("/ 月"),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
             "訂閱期間為 1 個月。價格與訂閱週期將以商店顯示資訊為準。自動續訂方案可隨時至商店帳號設定取消。"),
         "subscriptionRestore": MessageLookupByLibrary.simpleMessage("恢復購買"),

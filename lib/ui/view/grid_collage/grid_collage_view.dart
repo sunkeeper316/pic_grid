@@ -22,6 +22,52 @@ class GridCollageView extends GetView<GridCollageViewController> {
     Colors.purple,
   ];
 
+  void _showCanvasSettings(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                S.of(context).canvasAspectRatio,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 18),
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: CollageAspectRatio.values
+                      .map(
+                        (ratio) => ChoiceChip(
+                          avatar: Icon(
+                            ratio.value == 1
+                                ? Icons.crop_square
+                                : ratio.value > 1
+                                ? Icons.crop_landscape
+                                : Icons.crop_portrait,
+                          ),
+                          label: Text(ratio.label),
+                          selected: controller.canvasAspectRatio.value == ratio,
+                          onSelected: (_) =>
+                              controller.canvasAspectRatio.value = ratio,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showBorderSettings(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
@@ -281,6 +327,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
                   onPressed: () => _confirmPickImages(context),
                 ),
                 IconButton(
+                  icon: const Icon(Icons.aspect_ratio),
+                  tooltip: S.of(context).canvasAspectRatio,
+                  onPressed: () => _showCanvasSettings(context),
+                ),
+                IconButton(
                   icon: const Icon(Icons.border_style_outlined),
                   tooltip: S.of(context).editorBorderSettingsTooltip,
                   onPressed: () => _showBorderSettings(context),
@@ -322,6 +373,7 @@ class GridCollageView extends GetView<GridCollageViewController> {
           final localProportions = controller.localProportions
               .map((track) => List<double>.of(track))
               .toList();
+          final aspectRatio = controller.canvasAspectRatio.value.value;
           final borderWidth = controller.borderWidth.value;
           final borderColor = controller.borderColor.value;
           final isSaving = controller.isSaving.value;
@@ -331,8 +383,11 @@ class GridCollageView extends GetView<GridCollageViewController> {
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              final double width = constraints.maxWidth;
-              final double height = constraints.maxHeight;
+              final double width = math.min(
+                constraints.maxWidth,
+                constraints.maxHeight * aspectRatio,
+              );
+              final double height = width / aspectRatio;
 
               int rows = rowProportions.length;
               int cols = colProportions.length;
@@ -682,9 +737,15 @@ class GridCollageView extends GetView<GridCollageViewController> {
                 }
               }
 
-              return RepaintBoundary(
-                key: controller.repaintKey,
-                child: Stack(children: children),
+              return Center(
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: RepaintBoundary(
+                    key: controller.repaintKey,
+                    child: Stack(children: children),
+                  ),
+                ),
               );
             },
           );

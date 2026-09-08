@@ -118,5 +118,6 @@
     "placeholders": {
       "index": { "type": "int" }
     }
-  }
+  },
+  "canvasAspectRatio": "Canvas aspect ratio"
 }

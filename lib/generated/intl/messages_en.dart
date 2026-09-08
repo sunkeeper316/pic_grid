@@ -38,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "borderSettings": MessageLookupByLibrary.simpleMessage("Border"),
         "borderThickness": MessageLookupByLibrary.simpleMessage("Thickness"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "canvasAspectRatio":
+            MessageLookupByLibrary.simpleMessage("Canvas aspect ratio"),
         "clipCancelTooltip": MessageLookupByLibrary.simpleMessage("Cancel"),
         "clipDoneTooltip": MessageLookupByLibrary.simpleMessage("Done"),
         "clipLoadingImage":
@@ -157,6 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Subscribe to remove all ads"),
         "subscriptionHeadline":
             MessageLookupByLibrary.simpleMessage("Enjoy PicGrid without ads"),
+        "subscriptionPerMonth": MessageLookupByLibrary.simpleMessage("/ month"),
         "subscriptionPlanPreparing": MessageLookupByLibrary.simpleMessage(
             "Subscription plan coming soon"),
         "subscriptionProductUnavailable": MessageLookupByLibrary.simpleMessage(
@@ -167,7 +170,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your transaction is being processed…"),
         "subscriptionPurchaseSuccess": MessageLookupByLibrary.simpleMessage(
             "Subscription successful. Ads have been removed."),
-        "subscriptionPerMonth": MessageLookupByLibrary.simpleMessage("/ month"),
         "subscriptionRenewalNotice": MessageLookupByLibrary.simpleMessage(
             "The subscription period is 1 month. The store will display the final price and billing period. Auto-renewing subscriptions can be canceled in your store account settings."),
         "subscriptionRestore":

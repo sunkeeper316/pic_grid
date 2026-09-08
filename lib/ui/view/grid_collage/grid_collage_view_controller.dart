@@ -10,6 +10,19 @@ import 'package:pic_grid/generated/l10n.dart';
 import 'package:pic_grid/services/review_prompt_service.dart';
 import 'package:pic_grid/ui/view/photo_picker/photo_picker_view.dart';
 
+enum CollageAspectRatio {
+  square('1:1', 1),
+  landscapeClassic('4:3', 4 / 3),
+  portraitClassic('3:4', 3 / 4),
+  landscapeWide('16:9', 16 / 9),
+  portraitWide('9:16', 9 / 16);
+
+  const CollageAspectRatio(this.label, this.value);
+
+  final String label;
+  final double value;
+}
+
 enum MainPhotoPosition { left, right, top, bottom }
 
 class GridCollageViewController extends GetxController {
@@ -17,6 +30,7 @@ class GridCollageViewController extends GetxController {
 
   var selectedImages = <XFile>[].obs;
   var isSaving = false.obs;
+  final canvasAspectRatio = CollageAspectRatio.square.obs;
   var borderWidth = 0.0.obs;
   var borderColor = Colors.white.obs;
   var mainPhotoPosition = MainPhotoPosition.left.obs;
