@@ -422,8 +422,34 @@ class GridCollageView extends GetView<GridCollageViewController> {
                     height: cellHeight,
                     child: _EditablePhotoCell(
                       file: File(selectedImages[index].path),
-                      borderWidth: borderWidth,
-                      borderColor: borderColor,
+                      // Each photo contributes half of an internal seam.
+                      // Canvas edges keep the full selected border width.
+                      border: Border(
+                        left: BorderSide(
+                          color: borderColor,
+                          width: left.abs() < 0.001
+                              ? borderWidth
+                              : borderWidth / 2,
+                        ),
+                        top: BorderSide(
+                          color: borderColor,
+                          width: top.abs() < 0.001
+                              ? borderWidth
+                              : borderWidth / 2,
+                        ),
+                        right: BorderSide(
+                          color: borderColor,
+                          width: (left + cellWidth - width).abs() < 0.001
+                              ? borderWidth
+                              : borderWidth / 2,
+                        ),
+                        bottom: BorderSide(
+                          color: borderColor,
+                          width: (top + cellHeight - height).abs() < 0.001
+                              ? borderWidth
+                              : borderWidth / 2,
+                        ),
+                      ),
                       backgroundColor: Colors.white,
                       gesturesEnabled: !isSaving,
                     ),
@@ -814,15 +840,13 @@ class _LayoutOption extends StatelessWidget {
 class _EditablePhotoCell extends StatefulWidget {
   const _EditablePhotoCell({
     required this.file,
-    required this.borderWidth,
-    required this.borderColor,
+    required this.border,
     required this.backgroundColor,
     required this.gesturesEnabled,
   });
 
   final File file;
-  final double borderWidth;
-  final Color borderColor;
+  final Border border;
   final Color backgroundColor;
   final bool gesturesEnabled;
 
@@ -1003,16 +1027,11 @@ class _EditablePhotoCellState extends State<_EditablePhotoCell> {
               children: [
                 ColoredBox(color: widget.backgroundColor),
                 image,
-                if (widget.borderWidth > 0)
+                if (widget.border.dimensions != EdgeInsets.zero)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: widget.borderColor,
-                            width: widget.borderWidth,
-                          ),
-                        ),
+                        decoration: BoxDecoration(border: widget.border),
                       ),
                     ),
                   ),

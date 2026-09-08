@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -55,6 +58,46 @@ void main() {
         expect(tester.takeException(), isNull);
       }
     }
+    // Check rendered pixels: two outer borders and one shared seam must
+    // each occupy exactly the selected width, including after transposing.
+    controller.borderWidth.value = 8;
+    controller.borderColor.value = const Color(0xFFFF0000);
+    controller.isSaving.value = true;
+    controller.canvasAspectRatio.value = CollageAspectRatio.square;
+    for (final transpose in [false, true]) {
+      if (transpose) controller.toggleLayout();
+      await tester.pump();
+      final boundary =
+          controller.repaintKey.currentContext!.findRenderObject()
+              as RenderRepaintBoundary;
+      final capture = (await tester.runAsync(() => boundary.toImage()))!;
+      final pixels = (await tester.runAsync(
+        () => capture.toByteData(format: ui.ImageByteFormat.rawRgba),
+      ))!;
+      final length = transpose ? capture.height : capture.width;
+      final runs = <int>[];
+      var run = 0;
+      for (var position = 0; position < length; position++) {
+        final x = transpose ? 20 : position;
+        final y = transpose ? position : 20;
+        final offset = (y * capture.width + x) * 4;
+        final red =
+            pixels.getUint8(offset) == 255 &&
+            pixels.getUint8(offset + 1) == 0 &&
+            pixels.getUint8(offset + 2) == 0;
+        if (red) {
+          run++;
+        } else if (run > 0) {
+          runs.add(run);
+          run = 0;
+        }
+      }
+      if (run > 0) runs.add(run);
+      expect(runs, [8, 8, 8]);
+      capture.dispose();
+    }
+    controller.isSaving.value = false;
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Canvas aspect ratio'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ChoiceChip, '4:3'));
