@@ -8,11 +8,11 @@ PODS:
   - gal (1.0.0):
     - Flutter
     - FlutterMacOS
-  - Google-Mobile-Ads-SDK (11.13.0):
+  - Google-Mobile-Ads-SDK (13.9.0):
     - GoogleUserMessagingPlatform (>= 1.1)
-  - google_mobile_ads (5.3.1):
+  - google_mobile_ads (9.1.0):
     - Flutter
-    - Google-Mobile-Ads-SDK (~> 11.13.0)
+    - Google-Mobile-Ads-SDK (~> 13.7)
     - webview_flutter_wkwebview
   - GoogleUserMessagingPlatform (3.1.0)
   - image_picker_ios (0.0.1):
@@ -121,8 +121,8 @@ SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   gal: 6a522c75909f1244732d4596d11d6a2f86ff37a5
-  Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
-  google_mobile_ads: fe0e2c1764ad95323dd0e3081d0bb2d58411f957
+  Google-Mobile-Ads-SDK: cec761d0da669c462bcc19cd16c747498b9f39f7
+  google_mobile_ads: 8c61669fb8e2ba987b0b7116b5265ba647cdca0c
   GoogleUserMessagingPlatform: befe603da6501006420c206222acd449bba45a9c
   image_picker_ios: 4f2f91b01abdb52842a8e277617df877e40f905b
   in_app_purchase_storekit: 2342c0a5da86593124d08dd13d920f39a52b273a
@@ -139,6 +139,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
   webview_flutter_wkwebview: 29eb20d43355b48fe7d07113835b9128f84e3af4
 
-PODFILE CHECKSUM: 76b4b486ae32932d6ee0a795c83e43d1029409e9
+PODFILE CHECKSUM: 24277c9bf5041b7a27188af6940e83da349337ca
 
 COCOAPODS: 1.16.2
